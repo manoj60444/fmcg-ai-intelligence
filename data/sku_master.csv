@@ -1,0 +1,71 @@
+SKU_ID,SKU_Name,Category,MRP,Margin_Percentage
+SKU01,Hair Oil 100ml,Haircare,120,18
+SKU02,Hair Oil 200ml,Haircare,210,20
+SKU03,Shampoo 100ml,Haircare,150,22
+SKU04,Shampoo 200ml,Haircare,250,24
+SKU05,Conditioner 100ml,Haircare,180,20
+SKU06,Hair Gel 50ml,Haircare,90,25
+SKU07,Hair Serum 50ml,Haircare,280,30
+SKU08,Hair Color Pack,Haircare,350,28
+SKU09,Anti Dandruff Shampoo 150ml,Haircare,220,22
+SKU10,Hair Mask 100g,Haircare,160,18
+SKU11,Face Cream 50g,Skincare,180,25
+SKU12,Face Wash 100ml,Skincare,150,22
+SKU13,Body Lotion 200ml,Skincare,220,20
+SKU14,Sunscreen 50ml,Skincare,280,28
+SKU15,Night Cream 50g,Skincare,350,30
+SKU16,Moisturizer 100ml,Skincare,200,22
+SKU17,Face Scrub 50g,Skincare,130,20
+SKU18,Aloe Vera Gel 100ml,Skincare,160,24
+SKU19,Anti Aging Cream 30g,Skincare,450,35
+SKU20,BB Cream 30ml,Skincare,320,28
+SKU21,Toothpaste 100g,Oral Care,80,15
+SKU22,Toothpaste 200g,Oral Care,140,18
+SKU23,Mouthwash 250ml,Oral Care,180,22
+SKU24,Toothbrush Standard,Oral Care,40,30
+SKU25,Toothbrush Premium,Oral Care,90,35
+SKU26,Tooth Whitening Gel,Oral Care,220,28
+SKU27,Kids Toothpaste 50g,Oral Care,60,20
+SKU28,Dental Floss Pack,Oral Care,110,25
+SKU29,Tongue Cleaner,Oral Care,35,40
+SKU30,Sensitivity Toothpaste 100g,Oral Care,120,20
+SKU31,Floor Cleaner 500ml,Home Care,120,18
+SKU32,Dish Wash 250ml,Home Care,80,20
+SKU33,Dish Wash 500ml,Home Care,140,22
+SKU34,Toilet Cleaner 500ml,Home Care,100,20
+SKU35,Glass Cleaner 250ml,Home Care,110,22
+SKU36,Fabric Softener 500ml,Home Care,180,20
+SKU37,Detergent 1kg,Home Care,200,15
+SKU38,Detergent 500g,Home Care,110,18
+SKU39,Handwash 200ml,Home Care,90,25
+SKU40,Surface Cleaner 500ml,Home Care,130,20
+SKU41,Deo Spray 150ml,Personal Care,200,28
+SKU42,Body Wash 250ml,Personal Care,250,24
+SKU43,Soap 100g,Personal Care,40,20
+SKU44,Soap 75g (3-pack),Personal Care,100,22
+SKU45,Talcum Powder 100g,Personal Care,80,18
+SKU46,Hand Cream 50ml,Personal Care,120,25
+SKU47,Lip Balm 4g,Personal Care,80,35
+SKU48,Wet Wipes 30s,Personal Care,100,22
+SKU49,Sanitizer 200ml,Personal Care,130,28
+SKU50,Baby Powder 100g,Personal Care,120,20
+SKU51,Instant Noodles 70g,Foods,14,12
+SKU52,Biscuits 100g,Foods,30,15
+SKU53,Cookie Pack 200g,Foods,80,18
+SKU54,Juice 200ml,Foods,25,20
+SKU55,Juice 1L,Foods,100,18
+SKU56,Jam 200g,Foods,90,22
+SKU57,Ketchup 200g,Foods,70,20
+SKU58,Peanut Butter 200g,Foods,180,25
+SKU59,Cornflakes 250g,Foods,160,18
+SKU60,Oats 500g,Foods,200,20
+SKU61,Baby Shampoo 200ml,Baby Care,220,22
+SKU62,Baby Lotion 200ml,Baby Care,250,24
+SKU63,Baby Oil 200ml,Baby Care,180,20
+SKU64,Baby Soap 75g,Baby Care,60,22
+SKU65,Diaper Pack S,Baby Care,400,15
+SKU66,Diaper Pack M,Baby Care,450,15
+SKU67,Baby Wipes 80s,Baby Care,180,20
+SKU68,Baby Cream 50g,Baby Care,150,25
+SKU69,Baby Wash 200ml,Baby Care,200,22
+SKU70,Baby Powder 200g,Baby Care,160,20
