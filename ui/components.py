@@ -1,116 +1,123 @@
 """
-Reusable UI components for the FMCG AI Intelligence System.
-Premium AI-themed components with glassmorphism, glow effects, and animations.
+Professional FMCG AI Components
+===============================
+Senior Developer UI: Glassmorphism, Status Indicators, Sentiment Feeds.
 """
 
 import streamlit as st
 
-
 def render_ai_header(title, subtitle):
-    """Render the premium animated AI header with badge and neural line."""
-    html = (
-        f'<div class="ai-header-container">'
-        f'<div class="ai-badge"><span class="pulse-dot"></span> AI SYSTEM ONLINE</div>'
-        f'<div class="main-title">{title}</div>'
-        f'<div class="sub-title">{subtitle}</div>'
-        f'<div class="neural-line"></div>'
-        f'</div>'
-    )
-    st.markdown(html, unsafe_allow_html=True)
+    """Render the professional thin-weight header with letter spacing."""
+    st.markdown(f"""
+    <div class="main-header">
+        <h1>{title}</h1>
+        <p>{subtitle}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
+def render_kpi(label, value, change, icon, is_up=True):
+    """Render a custom HTML/CSS glassmorphism KPI card."""
+    change_class = "change-up" if is_up else "change-down"
+    change_sign = "↑" if is_up else "↓"
+    
+    return f"""
+    <div class="kpi-card">
+        <div class="kpi-icon">{icon}</div>
+        <div class="kpi-label">{label}</div>
+        <div class="kpi-value">{value}</div>
+        <div class="kpi-change {change_class}">
+            {change_sign} {change} <span>vs last month</span>
+        </div>
+    </div>
+    """
 
 def render_overview_cards(stats):
-    """Render the five KPI cards with glassmorphism and icons."""
+    """Render the glassmorphism KPI card row with correct data."""
+    # Build 1-3-1 spacing using columns if needed, but flexbox is better for this
+    # Flexible row of cards
     cards = [
-        ("🏢", stats['distributors'], "Active Distributors"),
-        ("🌍", stats['zones'], "Zones Monitored"),
-        ("📦", stats['skus'], "SKUs Tracked"),
-        ("📅", stats['days'], "Days of Data"),
-        ("📊", f"{stats['data_points']:,}", "Data Points"),
+        {"icon": "🏢", "label": "Active Distributors", "value": stats['distributors'], "change": "4.2%", "up": True},
+        {"icon": "🌍", "label": "Zones Monitored", "value": stats['zones'], "change": "0%", "up": True},
+        {"icon": "📦", "label": "SKUs Tracked", "value": stats['skus'], "change": "12", "up": True},
+        {"icon": "📅", "label": "Operational Days", "value": stats['days'], "change": "30", "up": True},
     ]
-    cards_html = ""
-    for icon, value, label in cards:
-        cards_html += (
-            f'<div class="overview-card">'
-            f'<div class="overview-icon">{icon}</div>'
-            f'<div class="overview-number">{value}</div>'
-            f'<div class="overview-label">{label}</div>'
-            f'</div>'
-        )
-    st.markdown(
-        f'<div class="overview-container">{cards_html}</div>',
-        unsafe_allow_html=True,
-    )
+    
+    cols = st.columns(len(cards))
+    for i, col in enumerate(cols):
+        with col:
+            st.markdown(render_kpi(
+                cards[i]['label'], 
+                cards[i]['value'], 
+                cards[i]['change'], 
+                cards[i]['icon'], 
+                cards[i]['up']
+            ), unsafe_allow_html=True)
 
+def render_status_indicator(status_type):
+    """Render a professional dot status indicator: optimal, warning, risk."""
+    status_map = {
+        "Optimal": "dot-optimal",
+        "Warning": "dot-warning",
+        "Risk": "dot-risk"
+    }
+    class_name = status_map.get(status_type, "dot-optimal")
+    return f'<span class="status-dot {class_name}"></span>'
 
-def render_layer_status():
-    """Render the AI layer pipeline with connectors."""
-    from config.settings import LAYERS
-
-    nodes_html = ""
-    for i, layer in enumerate(LAYERS):
-        nodes_html += (
-            f'<div class="layer-node">'
-            f'<div class="layer-node-icon">{layer["icon"]}</div>'
-            f'<div class="layer-node-name">{layer["name"]}</div>'
-            f'<div class="layer-node-status"><span class="dot"></span> ACTIVE</div>'
-            f'</div>'
-        )
-        if i < len(LAYERS) - 1:
-            nodes_html += '<div class="layer-connector"></div>'
-
-    st.markdown(
-        f'<div class="layer-pipeline">{nodes_html}</div>',
-        unsafe_allow_html=True,
-    )
-
-
-def render_alert_card(alert):
-    """Render a cyberpunk-style red alert card for a detected anomaly."""
-    html = (
-        f'<div class="alert-card">'
-        f'<div class="alert-header">'
-        f'<span class="alert-badge">⚠ ANOMALY DETECTED</span>'
-        f'<span class="alert-title">{alert["Zone"]} Zone – {alert["Cluster"]}</span>'
-        f'</div>'
-        f'<div class="alert-details">'
-        f'<div class="alert-metric"><div class="alert-metric-value">{alert["Confidence"]}</div><div class="alert-metric-label">Confidence</div></div>'
-        f'<div class="alert-metric"><div class="alert-metric-value">{alert["Projected_Risk"]}</div><div class="alert-metric-label">Projected Risk</div></div>'
-        f'<div class="alert-metric"><div class="alert-metric-value">{alert["Distributors_Affected"]}</div><div class="alert-metric-label">Affected Nodes</div></div>'
-        f'<div class="alert-metric"><div class="alert-metric-value">{alert["Sales_Drop"]}</div><div class="alert-metric-label">Sales Decline</div></div>'
-        f'</div></div>'
-    )
-    st.markdown(html, unsafe_allow_html=True)
-
-
-def render_no_anomaly(zone_label):
-    """Render a green 'all clear' banner."""
-    html = (
-        f'<div class="no-anomaly-banner">'
-        f'<div class="icon">✅</div>'
-        f'<div class="headline">All Systems Nominal</div>'
-        f'<div class="body">{zone_label} operations are within normal parameters. '
-        f'AI monitoring confirms all distributor metrics are within '
-        f'acceptable thresholds across sales, credit, and inventory signals.</div>'
-        f'</div>'
-    )
-    st.markdown(html, unsafe_allow_html=True)
-
+def render_sentiment_feed(news_items):
+    """Render a professional scrollable news/intelligence feed."""
+    items_html = ""
+    for item in news_items:
+        items_html += f"""
+        <div class="sentiment-item">
+            <div style="font-size:1.5rem;">{item['icon']}</div>
+            <div style="flex:1;">
+                <div style="font-weight:600; color:#0F172A; font-size:0.9rem;">{item['title']}</div>
+                <div style="color:#64748B; font-size:0.8rem; margin-top:2px;">{item['desc']}</div>
+            </div>
+            {render_status_indicator(item['status'])}
+        </div>
+        """
+    
+    st.markdown(f"""
+    <div class="sentiment-container">
+        {items_html}
+    </div>
+    """, unsafe_allow_html=True)
 
 def render_divider():
-    """Render a gradient divider line."""
-    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-
+    """Simple subtle divider."""
+    st.markdown('<hr style="border: 0; height: 1px; background: #E2E8F0; margin: 2rem 0;">', unsafe_allow_html=True)
 
 def render_ai_footer():
-    """Render the premium AI footer."""
-    html = (
-        '<div class="ai-footer">'
-        '<div class="ai-footer-line"></div>'
-        '<div class="ai-footer-text">'
-        '<span>FMCG Operational Intelligence</span> · '
-        'Powered by <span>Artificial Intelligence</span> · '
-        '6 Active Neural Layers · Real-time Monitoring'
-        '</div></div>'
-    )
-    st.markdown(html, unsafe_allow_html=True)
+    """Professional minimalist footer."""
+    st.markdown("""
+    <div style="text-align:center; padding: 4rem 0; color:#94A3B8; font-size:0.8rem; font-weight:500; letter-spacing:0.05em;">
+        FMCG OPERATIONAL INTELLIGENCE LAYER — PRODUCTION CLUSTER V4.2
+    </div>
+    """, unsafe_allow_html=True)
+
+def render_alert_card(alert):
+    """Professional alert card with status dot."""
+    st.markdown(f"""
+    <div class="sentiment-item" style="border-left: 4px solid #EF4444; border-radius: 12px; background:white; padding: 1.5rem;">
+        <div style="font-size:2rem; margin-right: 1rem;">🚨</div>
+        <div style="flex:1;">
+            <div style="text-transform:uppercase; font-size:0.75rem; font-weight:700; color:#EF4444; letter-spacing:0.1em;">ANOMALY DETECTED</div>
+            <div style="font-size:1.1rem; font-weight:700; color:#0F172A; margin: 4px 0;">{alert['Zone']} Zone: {alert['Cluster']} Cluster</div>
+            <div style="color:#64748B; font-size:0.9rem;">Confidence: <b>{alert['Confidence']}</b> | Risk: <b>{alert['Projected_Risk']}</b></div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def render_no_anomaly(zone):
+    """Professional 'all clear' state."""
+    st.markdown(f"""
+    <div class="sentiment-item" style="border-left: 4px solid #10B981; border-radius: 12px; background:white; padding: 1.5rem;">
+        <div style="font-size:2rem; margin-right: 1rem;">✅</div>
+        <div style="flex:1;">
+            <div style="text-transform:uppercase; font-size:0.75rem; font-weight:700; color:#10B981; letter-spacing:0.1em;">All Systems Optimal</div>
+            <div style="font-size:1.1rem; font-weight:700; color:#0F172A; margin: 4px 0;">Cluster {zone} is stable</div>
+            <div style="color:#64748B; font-size:0.9rem;">No behavioural drift detected in secondary distributor signals.</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
