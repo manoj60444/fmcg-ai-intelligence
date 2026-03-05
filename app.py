@@ -1,8 +1,8 @@
 """
 FMCG Operational Intelligence System
 =====================================
+AI-Powered Real-time Monitoring & Analysis Platform
 Main Streamlit entry-point.
-All business logic lives in layers/; all UI helpers in ui/.
 """
 
 import time
@@ -13,11 +13,13 @@ from utils.data_loader import load_data, get_zone_stats
 from layers.monitoring import run_behaviour_scan
 from ui.styles import CUSTOM_CSS
 from ui.components import (
+    render_ai_header,
     render_overview_cards,
     render_layer_status,
     render_alert_card,
     render_no_anomaly,
     render_divider,
+    render_ai_footer,
 )
 from ui.tabs import (
     render_root_cause_tab,
@@ -60,11 +62,9 @@ if "selected_zone" not in st.session_state:
     st.session_state.selected_zone = DEFAULT_ZONE
 
 # ──────────────────────────────────────
-# Title
+# AI Header
 # ──────────────────────────────────────
-st.markdown(f'<div class="main-title">{APP_TITLE}</div>', unsafe_allow_html=True)
-st.markdown(f'<div class="sub-title">{APP_SUBTITLE}</div>', unsafe_allow_html=True)
-render_divider()
+render_ai_header(APP_TITLE, APP_SUBTITLE)
 
 # ──────────────────────────────────────
 # Zone selector + Overview cards
@@ -88,7 +88,7 @@ zone_label = selected_zone if selected_zone != "All Zones" else "All Zones"
 stats = get_zone_stats(dist_df, sku_df, ops_df, selected_zone)
 render_overview_cards(stats)
 
-# Layer status
+# Layer status pipeline
 render_layer_status()
 render_divider()
 
@@ -98,7 +98,7 @@ render_divider()
 _, btn_col, _ = st.columns([1, 1, 1])
 with btn_col:
     scan_clicked = st.button(
-        "🔍  Run Behaviour Scan",
+        "🔍  Run AI Behaviour Scan",
         use_container_width=True,
         key="scan_btn",
     )
@@ -111,25 +111,25 @@ if scan_clicked:
     progress = st.progress(0)
     status = st.empty()
     steps = [
-        "Initializing monitoring intelligence…",
+        "Initializing neural monitoring engine…",
         f"Loading operational data for {zone_label}…",
-        "Computing rolling averages per distributor…",
-        "Running multi-signal anomaly detection…",
+        "Computing rolling averages per distributor node…",
+        "Running multi-signal anomaly detection algorithm…",
         "Cross-referencing credit & inventory patterns…",
-        "Calculating confidence scores…",
-        "Generating alert objects…",
+        "AI calculating confidence scores…",
+        "Generating intelligent alert objects…",
         "Anomaly detection complete.",
     ]
     for i, step in enumerate(steps):
         status.markdown(
-            f'<div class="scanning-text">🔄 {step}</div>',
+            f'<div class="scanning-text">⟳ {step}</div>',
             unsafe_allow_html=True,
         )
         progress.progress((i + 1) / len(steps))
         time.sleep(0.4)
 
     status.markdown(
-        '<div class="scanning-text">✅ Behaviour scan complete.</div>',
+        '<div class="scanning-text">✅ AI Behaviour scan complete.</div>',
         unsafe_allow_html=True,
     )
     time.sleep(0.4)
@@ -190,12 +190,4 @@ if st.session_state.scan_complete:
 # Footer
 # ──────────────────────────────────────
 st.markdown("")
-render_divider()
-st.markdown("""
-<div style="text-align:center;padding:1rem;">
-    <span style="color:#475569;font-size:0.8rem;">
-        FMCG Operational Intelligence System · Powered by AI
-        · 6 Active Intelligence Layers · Demo Build
-    </span>
-</div>
-""", unsafe_allow_html=True)
+render_ai_footer()
