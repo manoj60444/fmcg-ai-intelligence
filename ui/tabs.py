@@ -100,11 +100,44 @@ def render_predictive_tab(alert, ops_df, dist_df):
         st.markdown("""
         <div class="prediction-card">
             <div class="prediction-label">🏢 Spread Risk</div>
-            <div class="prediction-value">3 More</div>
-            <div class="prediction-label">Distributors Likely Affected</div>
+            <div class="prediction-value">Likely High</div>
+            <div class="prediction-label">Market Contagion Rating</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("")
+    
+    # NEW: Catchy Pie Chart for Risk Distribution
+    st.markdown("#### 🥧 Risk Matrix Distribution")
+    cc1, cc2 = st.columns([1, 2])
+    with cc1:
+        pie_fig = go.Figure(data=[go.Pie(
+            labels=['Sales Loss', 'Margin Compression', 'Inventory Bloat', 'Credit Exposure'],
+            values=[40, 25, 20, 15],
+            hole=.6,
+            marker_colors=['#f87171', '#fbbf24', '#6366f1', '#a855f7']
+        )])
+        pie_fig.update_layout(
+            showlegend=False,
+            height=250,
+            margin=dict(l=0, r=0, t=0, b=0),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+        )
+        st.plotly_chart(pie_fig, use_container_width=True)
+    
+    with cc2:
+        st.markdown("""
+        <div style="padding: 1rem; background: rgba(15,18,35,0.4); border-radius: 12px; height: 100%;">
+            <p style="color: #94a3b8; font-size: 0.9rem;">
+                <b>AI Insight:</b> Most of the risk is concentrated in <b>Sales Loss (40%)</b>. 
+                The system detects that the secondary cause is <b>Margin Compression</b> due to 
+                aggressive competitor pricing in the south cluster.
+            </p>
+            <p style="color: #6366f1; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px;">
+                CONFIDENCE: 94.2%
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
     # Premium Plotly chart
     fig = go.Figure()

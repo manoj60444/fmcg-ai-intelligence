@@ -21,6 +21,46 @@ CUSTOM_CSS = """
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
+    /* ---------- Sidebar Styling ---------- */
+    [data-testid="stSidebar"] {
+        background: rgba(10, 10, 20, 0.95);
+        border-right: 1px solid rgba(99, 102, 241, 0.2);
+        backdrop-filter: blur(20px);
+    }
+    [data-testid="stSidebar"] .stSelectbox {
+        margin-top: 2rem;
+    }
+    
+    .nav-header {
+        text-align: center;
+        padding: 2rem 0;
+        border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        margin-bottom: 2rem;
+    }
+    .nav-item {
+        padding: 12px 20px;
+        margin: 8px 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #94a3b8;
+        font-weight: 500;
+        text-decoration: none;
+    }
+    .nav-item:hover {
+        background: rgba(99, 102, 241, 0.1);
+        color: #a78bfa;
+        transform: translateX(5px);
+    }
+    .nav-item-active {
+        background: linear-gradient(90deg, rgba(99,102,241,0.2), transparent);
+        border-left: 3px solid #6366f1;
+        color: #e2e8f0;
+    }
+
     /* Animated cyber-grid overlay */
     .stApp::before {
         content: '';
@@ -692,131 +732,32 @@ CUSTOM_CSS = """
     }
 
     /* ============================================================
-       ZONE SELECTOR
+       ANALYTICS & GRAPHS
        ============================================================ */
-    div[data-testid="stSelectbox"] label {
-        color: #a78bfa !important;
-        font-weight: 600 !important;
-        font-size: 0.85rem !important;
-        letter-spacing: 0.5px;
-    }
-    div[data-testid="stSelectbox"] > div > div {
-        background: rgba(15,18,35,0.8) !important;
-        border-color: rgba(99,102,241,0.2) !important;
-        border-radius: 12px !important;
-    }
-
-    /* ============================================================
-       SCROLLBAR
-       ============================================================ */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: rgba(15,18,35,0.5); }
-    ::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #6366f1, #8b5cf6);
-        border-radius: 3px;
-    }
-
-    /* ============================================================
-       EXPANDER (workflow)
-       ============================================================ */
-    .streamlit-expanderHeader {
-        background: rgba(15,18,35,0.6) !important;
-        border: 1px solid rgba(99,102,241,0.15) !important;
-        border-radius: 12px !important;
-        color: #e2e8f0 !important;
-        font-weight: 600 !important;
-    }
-    .streamlit-expanderContent {
-        background: rgba(10,12,25,0.5) !important;
-        border: 1px solid rgba(99,102,241,0.1) !important;
-        border-radius: 0 0 12px 12px !important;
-    }
-
-    /* ============================================================
-       FOOTER
-       ============================================================ */
-    .ai-footer {
-        text-align: center;
+    .chart-container {
+        background: rgba(15, 18, 35, 0.6);
+        border: 1px solid rgba(99, 102, 241, 0.15);
+        border-radius: 20px;
         padding: 1.5rem;
-        position: relative;
-    }
-    .ai-footer-line {
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(99,102,241,0.2), transparent);
-        margin-bottom: 1.5rem;
-    }
-    .ai-footer-text {
-        color: #334155;
-        font-size: 0.72rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        font-weight: 500;
-    }
-    .ai-footer-text span {
-        color: #6366f1;
-    }
-
-    /* ============================================================
-       RADIO BUTTONS
-       ============================================================ */
-    .stRadio > label {
-        color: #94a3b8 !important;
-    }
-    .stRadio > div {
-        background: rgba(15,18,35,0.4);
-        border-radius: 12px;
-        padding: 8px;
-    }
-
-    /* ============================================================
-       MARKDOWN text defaults
-       ============================================================ */
-    .stMarkdown p, .stMarkdown li {
-        color: #cbd5e1;
-    }
-    .stMarkdown h3 {
-        color: #e2e8f0 !important;
-        font-weight: 700 !important;
-    }
-    .stMarkdown strong {
-        color: #e2e8f0;
-    }
-
-    /* ============================================================
-       WORKFLOW SUCCESS CARD
-       ============================================================ */
-    .workflow-success {
-        background: rgba(34,197,94,0.06);
-        border: 1px solid rgba(34,197,94,0.2);
-        border-radius: 16px;
-        padding: 1.2rem;
         margin: 1rem 0;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        animation: successSlideIn 0.5s ease;
+        backdrop-filter: blur(20px);
     }
-    .workflow-success::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 2px;
-        background: linear-gradient(90deg, transparent, #22c55e, transparent);
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 2rem;
     }
-    @keyframes successSlideIn {
-        0% { opacity: 0; transform: translateY(10px); }
-        100% { opacity: 1; transform: translateY(0); }
+    
+    /* Hover effects for redirection cards */
+    .redirect-card {
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .workflow-info {
-        text-align: center;
-        margin-top: 2rem;
-        padding: 1.5rem;
-        background: rgba(99,102,241,0.05);
-        border: 1px solid rgba(99,102,241,0.15);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
+    .redirect-card:hover {
+        border-color: #6366f1;
+        background: rgba(99, 102, 241, 0.05);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
     }
-
 </style>
 """

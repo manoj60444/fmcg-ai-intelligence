@@ -1,14 +1,13 @@
 """
 FMCG Operational Intelligence System
 =====================================
-AI-Powered Real-time Monitoring & Analysis Platform
-Main Streamlit entry-point.
+Multi-page AI-Powered Infrastructure.
 """
 
 import time
 import streamlit as st
 
-from config.settings import APP_TITLE, APP_ICON, APP_SUBTITLE, ZONES, DEFAULT_ZONE
+from config.settings import APP_TITLE, APP_ICON, APP_SUBTITLE, ZONES, DEFAULT_ZONE, LAYERS
 from utils.data_loader import load_data, get_zone_stats
 from layers.monitoring import run_behaviour_scan
 from ui.styles import CUSTOM_CSS
@@ -33,25 +32,18 @@ from ui.tabs import (
 # ──────────────────────────────────────
 st.set_page_config(
     page_title=APP_TITLE,
-    page_icon=APP_ICON,
+    page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 # ──────────────────────────────────────
-# Load data
+# Session state & Navigation
 # ──────────────────────────────────────
-try:
-    dist_df, sku_df, ops_df = load_data()
-except FileNotFoundError:
-    st.error("⚠️ Data files not found. Run `python generate_data.py` first!")
-    st.stop()
-
-# ──────────────────────────────────────
-# Session state defaults
-# ──────────────────────────────────────
+if "active_page" not in st.session_state:
+    st.session_state.active_page = "Dashboard"
 if "scan_complete" not in st.session_state:
     st.session_state.scan_complete = False
 if "chat_messages" not in st.session_state:
@@ -61,133 +53,141 @@ if "workflow_triggered" not in st.session_state:
 if "selected_zone" not in st.session_state:
     st.session_state.selected_zone = DEFAULT_ZONE
 
-# ──────────────────────────────────────
-# AI Header
-# ──────────────────────────────────────
-render_ai_header(APP_TITLE, APP_SUBTITLE)
+# Helper to change pages
+def navigate_to(page_name):
+    st.session_state.active_page = page_name
 
 # ──────────────────────────────────────
-# Zone selector + Overview cards
+# Sidebar Navigation
 # ──────────────────────────────────────
-zone_col, spacer = st.columns([1, 3])
-with zone_col:
+with st.sidebar:
+    st.markdown('<div class="nav-header">', unsafe_allow_html=True)
+    st.markdown(f'<div style="font-size: 3rem; margin-bottom: 0.5rem;">🧠</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="color:#e2e8f0; font-weight:700; font-size:1.2rem;">{APP_TITLE}</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    pages = ["Dashboard", "Analytics", "Prediction", "Intelligence", "Automation"]
+    icons = ["📊", "🔍", "📈", "💬", "⚡"]
+    
+    for page, icon in zip(pages, icons):
+        is_active = "nav-item-active" if st.session_state.active_page == page else ""
+        if st.button(f"{icon} {page}", key=f"nav_{page}", use_container_width=True):
+            navigate_to(page)
+    
+    st.sidebar.divider()
     selected_zone = st.selectbox(
-        "🌍 Select Zone",
+        "🌍 Global Zone Filter",
         options=ZONES,
         index=ZONES.index(st.session_state.selected_zone),
         key="zone_picker",
     )
-    # Reset scan on zone change
     if selected_zone != st.session_state.selected_zone:
         st.session_state.selected_zone = selected_zone
         st.session_state.scan_complete = False
-        st.session_state.chat_messages = []
-        st.session_state.workflow_triggered = False
-
-zone_label = selected_zone if selected_zone != "All Zones" else "All Zones"
-stats = get_zone_stats(dist_df, sku_df, ops_df, selected_zone)
-render_overview_cards(stats)
-
-# Layer status pipeline
-render_layer_status()
-render_divider()
 
 # ──────────────────────────────────────
-# Scan button
+# Data Loading
 # ──────────────────────────────────────
-_, btn_col, _ = st.columns([1, 1, 1])
-with btn_col:
-    scan_clicked = st.button(
-        "🔍  Run AI Behaviour Scan",
-        use_container_width=True,
-        key="scan_btn",
-    )
-
-if scan_clicked:
-    st.session_state.scan_complete = False
-    st.session_state.chat_messages = []
-    st.session_state.workflow_triggered = False
-
-    progress = st.progress(0)
-    status = st.empty()
-    steps = [
-        "Initializing neural monitoring engine…",
-        f"Loading operational data for {zone_label}…",
-        "Computing rolling averages per distributor node…",
-        "Running multi-signal anomaly detection algorithm…",
-        "Cross-referencing credit & inventory patterns…",
-        "AI calculating confidence scores…",
-        "Generating intelligent alert objects…",
-        "Anomaly detection complete.",
-    ]
-    for i, step in enumerate(steps):
-        status.markdown(
-            f'<div class="scanning-text">⟳ {step}</div>',
-            unsafe_allow_html=True,
-        )
-        progress.progress((i + 1) / len(steps))
-        time.sleep(0.4)
-
-    status.markdown(
-        '<div class="scanning-text">✅ AI Behaviour scan complete.</div>',
-        unsafe_allow_html=True,
-    )
-    time.sleep(0.4)
-    progress.empty()
-    status.empty()
-    st.session_state.scan_complete = True
+try:
+    dist_df, sku_df, ops_df = load_data()
+except FileNotFoundError:
+    st.error("⚠️ Data files not found. Run `python generate_data.py` first!")
+    st.stop()
 
 # ──────────────────────────────────────
-# Results
+# Page Router
 # ──────────────────────────────────────
-if st.session_state.scan_complete:
-    alerts, anomaly_df, _daily_agg = run_behaviour_scan(
-        ops_df, dist_df, selected_zone
-    )
+render_ai_header(APP_TITLE, APP_SUBTITLE)
 
+if st.session_state.active_page == "Dashboard":
+    # --- DASHBOARD PAGE ---
+    stats = get_zone_stats(dist_df, sku_df, ops_df, st.session_state.selected_zone)
+    render_overview_cards(stats)
+    render_layer_status()
+    render_divider()
+    
+    # Scan trigger cards (Redirecting to Analytics)
+    st.markdown("### 🛠 Operational Actions")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("""
+        <div class="overview-card redirect-card">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔍</div>
+            <div class="overview-number">Run Multi-Layer Scan</div>
+            <div class="overview-label">Analyze all zones for anomalies</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🚀 Start Intelligence Scan", use_container_width=True):
+            navigate_to("Analytics")
+            st.rerun()
+            
+    with c2:
+        st.markdown("""
+        <div class="overview-card redirect-card">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚡</div>
+            <div class="overview-number">Automation Layer</div>
+            <div class="overview-label">Review pending corrective workflows</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🔧 Access Automation", use_container_width=True):
+            navigate_to("Automation")
+            st.rerun()
+
+elif st.session_state.active_page == "Analytics":
+    # --- ANALYTICS / MONITORING PAGE ---
+    st.markdown("### 🔍 Real-time Monitoring Scan")
+    scan_clicked = st.button("🔍  Reload AI Behaviour Scan", use_container_width=True)
+    
+    if scan_clicked or not st.session_state.scan_complete:
+        progress = st.progress(0)
+        status = st.empty()
+        steps = ["Initializing Neural Network...", "Loading Data Pipeline...", "Analyzing Signal Noise...", "Identifying Patterns...", "Scan Complete"]
+        for i, step in enumerate(steps):
+            status.markdown(f'<div class="scanning-text">🔄 {step}</div>', unsafe_allow_html=True)
+            progress.progress((i + 1) / len(steps))
+            time.sleep(0.3)
+        st.session_state.scan_complete = True
+        status.empty()
+        progress.empty()
+
+    alerts, anomaly_df, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    
     if not alerts:
-        render_no_anomaly(zone_label)
+        render_no_anomaly(st.session_state.selected_zone)
     else:
-        # Show each alert card
         for alert in alerts:
             render_alert_card(alert)
+        
+        # New: Analytics Deep Dive Section
+        st.markdown("### 📊 Anomaly Root Cause Charts")
+        render_root_cause_tab(alerts[0], anomaly_df)
 
-        st.markdown("")
+elif st.session_state.active_page == "Prediction":
+    # --- PREDICTION PAGE ---
+    st.markdown("### 📈 Predictive Intelligence")
+    alerts, _, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    if alerts:
+        render_predictive_tab(alerts[0], ops_df, dist_df)
+    else:
+        st.info("No active anomalies to predict. Run a scan from the Analytics page.")
 
-        # Pick the first alert for tab drill-down (or let user choose)
-        if len(alerts) > 1:
-            alert_labels = [
-                f"{a['Zone']} Zone – {a['Cluster']}" for a in alerts
-            ]
-            chosen_idx = st.radio(
-                "Drill into alert:",
-                range(len(alert_labels)),
-                format_func=lambda x: alert_labels[x],
-                horizontal=True,
-            )
-            active_alert = alerts[chosen_idx]
-        else:
-            active_alert = alerts[0]
+elif st.session_state.active_page == "Intelligence":
+    # --- CHAT PAGE ---
+    st.markdown("### 💬 Central Intelligence Interface")
+    alerts, _, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    if alerts:
+        render_chat_tab(alerts[0], ops_df)
+    else:
+        st.info("Central Intelligence is idle. Please select a zone with active alerts.")
 
-        # Tabs
-        tab1, tab2, tab3, tab4 = st.tabs([
-            "🔎 Root Cause Analysis",
-            "📈 Predictive Impact",
-            "💬 Chat Intelligence",
-            "⚡ Trigger Workflow",
-        ])
+elif st.session_state.active_page == "Automation":
+    # --- AUTOMATION PAGE ---
+    st.markdown("### ⚡ Automation & Workflows")
+    alerts, _, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    if alerts:
+        render_workflow_tab(alerts[0])
+    else:
+        st.success("All workflows are cleared. System status: Optimal.")
 
-        with tab1:
-            render_root_cause_tab(active_alert, anomaly_df)
-        with tab2:
-            render_predictive_tab(active_alert, ops_df, dist_df)
-        with tab3:
-            render_chat_tab(active_alert, ops_df)
-        with tab4:
-            render_workflow_tab(active_alert)
-
-# ──────────────────────────────────────
-# Footer
-# ──────────────────────────────────────
-st.markdown("")
+render_divider()
 render_ai_footer()
