@@ -732,112 +732,149 @@ CUSTOM_CSS = """
     }
 
     /* ============================================================
-       PREMIUM AI BACKGROUND & GRID
+       ULTRA-PREMIUM BACKGROUND: DEEP OBSIDIAN & NEURAL CLOUD
        ============================================================ */
     .stApp {
-        background-color: #03030b;
-        background-image: 
-            radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-            radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.05) 0%, transparent 40%),
-            url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        background: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #030308 100%);
+        background-attachment: fixed;
         font-family: 'Outfit', sans-serif;
-        overflow-x: hidden;
     }
 
-    /* Neural Network Background Pattern */
+    /* Floating Data Particles & Neural Network Lines */
+    .stApp::before {
+        content: '';
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-image: 
+            radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+            radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
+            url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: -2;
+    }
+
+    /* Animated Data Stream Background Overlay */
+    @keyframes dataMove {
+        from { background-position: 0 0; }
+        to { background-position: 1000px 1000px; }
+    }
     .stApp::after {
         content: '';
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
         background-image: url('https://user-images.githubusercontent.com/11252171/200147913-c977926b-d336-417c-a4d1-8d26f634dba9.png');
-        background-size: cover;
-        opacity: 0.03;
+        background-size: 800px;
+        opacity: 0.05;
         pointer-events: none;
+        animation: dataMove 120s linear infinite;
         z-index: -1;
     }
 
     /* ---------- Sidebar: AI Command Center ---------- */
     [data-testid="stSidebar"] {
-        background: rgba(10, 10, 20, 0.9);
-        border-right: 1px solid rgba(99, 102, 241, 0.15);
-        backdrop-filter: blur(25px);
-        box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+        background: rgba(8, 8, 16, 0.95);
+        border-right: 1px solid rgba(99, 102, 241, 0.3);
+        backdrop-filter: blur(30px);
+        box-shadow: 15px 0 50px rgba(0,0,0,0.8);
     }
     
+    /* Reveal Sidebar Toggle Styling */
+    [data-testid="stSidebarCollapsedControl"] {
+        background: rgba(99, 102, 241, 0.15) !important;
+        border: 1px solid rgba(99, 102, 241, 0.5) !important;
+        border-radius: 50% !important;
+        left: 10px !important;
+        top: 10px !important;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3) !important;
+    }
+
     .nav-item {
-        margin: 10px 15px;
-        padding: 15px;
-        border-radius: 15px;
-        background: rgba(30, 41, 59, 0.3);
+        margin: 12px 15px;
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(20, 25, 45, 0.4);
         border: 1px solid rgba(99, 102, 241, 0.1);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         display: flex;
         align-items: center;
         gap: 15px;
         color: #94a3b8;
     }
     .nav-item:hover {
-        background: rgba(99, 102, 241, 0.1);
+        background: rgba(99, 102, 241, 0.15);
         border-color: #6366f1;
         color: #e2e8f0;
-        transform: scale(1.02);
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        transform: scale(1.05) translateX(5px);
+        box-shadow: -10px 0 20px rgba(99, 102, 241, 0.2);
     }
 
-    /* ---------- Premium Cards: Glass & Glow ---------- */
-    .overview-card {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        border-radius: 24px;
-        padding: 2rem;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        transition: all 0.4s ease;
+    /* ---------- REDIRECT UI PANELS ---------- */
+    .redirect-panel {
+        background: linear-gradient(145deg, rgba(20, 25, 45, 0.8), rgba(10, 15, 30, 0.9));
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 28px;
+        padding: 2.5rem;
+        text-align: center;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
         position: relative;
         overflow: hidden;
+        margin: 1rem 0;
     }
-    .overview-card::before {
-        content: "";
+    .redirect-panel:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: #6366f1;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+    .redirect-panel::before {
+        content: '';
         position: absolute;
-        top: -50%; left: -50%;
-        width: 200%; height: 200%;
-        background: conic-gradient(transparent, rgba(99, 102, 241, 0.2), transparent 30%);
-        animation: rotate 6s linear infinite;
-        pointer-events: none;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+        transition: 0.5s;
     }
-    @keyframes rotate {
-        100% { transform: rotate(360deg); }
+    .redirect-panel:hover::before {
+        left: 100%;
     }
     
-    .overview-number {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 2.8rem;
+    .panel-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+    }
+    .panel-title {
+        color: #e2e8f0;
+        font-size: 1.6rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+    .panel-desc {
+        color: #64748b;
+        font-size: 0.95rem;
     }
 
-    /* ---------- Alerts: High-Impact ---------- */
-    .alert-card {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(0, 0, 0, 0.4));
-        border: 2px solid rgba(239, 68, 68, 0.4);
-        box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
+    /* Action Glow Button */
+    .glow-btn {
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        color: white !important;
+        font-weight: 700 !important;
+        padding: 12px 30px !important;
+        border-radius: 50px !important;
+        border: none !important;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.5) !important;
+        transition: 0.3s !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
-    .alert-badge {
-        background: #ef4444;
-        box-shadow: 0 0 15px #ef4444;
-    }
-
-    /* Custom Animation for Redirection */
-    .redirect-click {
-        animation: pulseEffect 0.5s ease;
-    }
-    @keyframes pulseEffect {
-        0% { transform: scale(1); }
-        50% { transform: scale(0.95); opacity: 0.8; }
-        100% { transform: scale(1); }
+    .glow-btn:hover {
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.8) !important;
+        transform: translateY(-2px);
     }
 </style>
 """
