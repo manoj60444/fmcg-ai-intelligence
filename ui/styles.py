@@ -732,32 +732,112 @@ CUSTOM_CSS = """
     }
 
     /* ============================================================
-       ANALYTICS & GRAPHS
+       PREMIUM AI BACKGROUND & GRID
        ============================================================ */
-    .chart-container {
-        background: rgba(15, 18, 35, 0.6);
-        border: 1px solid rgba(99, 102, 241, 0.15);
-        border-radius: 20px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        backdrop-filter: blur(20px);
+    .stApp {
+        background-color: #03030b;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+            radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.05) 0%, transparent 40%),
+            url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        font-family: 'Outfit', sans-serif;
+        overflow-x: hidden;
     }
-    .stat-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 2rem;
+
+    /* Neural Network Background Pattern */
+    .stApp::after {
+        content: '';
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-image: url('https://user-images.githubusercontent.com/11252171/200147913-c977926b-d336-417c-a4d1-8d26f634dba9.png');
+        background-size: cover;
+        opacity: 0.03;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    /* ---------- Sidebar: AI Command Center ---------- */
+    [data-testid="stSidebar"] {
+        background: rgba(10, 10, 20, 0.9);
+        border-right: 1px solid rgba(99, 102, 241, 0.15);
+        backdrop-filter: blur(25px);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.5);
     }
     
-    /* Hover effects for redirection cards */
-    .redirect-card {
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    .nav-item {
+        margin: 10px 15px;
+        padding: 15px;
+        border-radius: 15px;
+        background: rgba(30, 41, 59, 0.3);
+        border: 1px solid rgba(99, 102, 241, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: #94a3b8;
     }
-    .redirect-card:hover {
+    .nav-item:hover {
+        background: rgba(99, 102, 241, 0.1);
         border-color: #6366f1;
-        background: rgba(99, 102, 241, 0.05);
+        color: #e2e8f0;
+        transform: scale(1.02);
         box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+
+    /* ---------- Premium Cards: Glass & Glow ---------- */
+    .overview-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: 24px;
+        padding: 2rem;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .overview-card::before {
+        content: "";
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: conic-gradient(transparent, rgba(99, 102, 241, 0.2), transparent 30%);
+        animation: rotate 6s linear infinite;
+        pointer-events: none;
+    }
+    @keyframes rotate {
+        100% { transform: rotate(360deg); }
+    }
+    
+    .overview-number {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* ---------- Alerts: High-Impact ---------- */
+    .alert-card {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(0, 0, 0, 0.4));
+        border: 2px solid rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
+    }
+    .alert-badge {
+        background: #ef4444;
+        box-shadow: 0 0 15px #ef4444;
+    }
+
+    /* Custom Animation for Redirection */
+    .redirect-click {
+        animation: pulseEffect 0.5s ease;
+    }
+    @keyframes pulseEffect {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.95); opacity: 0.8; }
+        100% { transform: scale(1); }
     }
 </style>
 """
