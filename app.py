@@ -1,31 +1,34 @@
 """
 FMCG Operational Intelligence System
 =====================================
-Senior Developer Edition: High-End Professional UI.
+Multi-page AI-Powered Infrastructure.
 """
 
-import streamlit as st
-from streamlit_option_menu import option_menu
 import time
+import streamlit as st
 
-from config.settings import APP_TITLE, APP_SUBTITLE, ZONES, DEFAULT_ZONE
+from config.settings import APP_TITLE, APP_ICON, APP_SUBTITLE, ZONES, DEFAULT_ZONE, LAYERS
 from utils.data_loader import load_data, get_zone_stats
 from layers.monitoring import run_behaviour_scan
 from ui.styles import CUSTOM_CSS
 from ui.components import (
     render_ai_header,
     render_overview_cards,
-    render_sentiment_feed,
-    render_kpi,
-    render_status_indicator,
-    render_divider,
-    render_ai_footer,
+    render_layer_status,
     render_alert_card,
     render_no_anomaly,
+    render_divider,
+    render_ai_footer,
+)
+from ui.tabs import (
+    render_root_cause_tab,
+    render_predictive_tab,
+    render_chat_tab,
+    render_workflow_tab,
 )
 
 # ──────────────────────────────────────
-# Page Configuration
+# Page config
 # ──────────────────────────────────────
 st.set_page_config(
     page_title=APP_TITLE,
@@ -37,16 +40,66 @@ st.set_page_config(
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 # ──────────────────────────────────────
-# Session State Management
+# Session state & Navigation
 # ──────────────────────────────────────
 if "active_page" not in st.session_state:
     st.session_state.active_page = "Dashboard"
 if "scan_complete" not in st.session_state:
     st.session_state.scan_complete = False
+if "chat_messages" not in st.session_state:
+    st.session_state.chat_messages = []
+if "workflow_triggered" not in st.session_state:
+    st.session_state.workflow_triggered = False
 if "selected_zone" not in st.session_state:
     st.session_state.selected_zone = DEFAULT_ZONE
-if "prediction_unlocked" not in st.session_state:
-    st.session_state.prediction_unlocked = False
+
+# Helper to change pages
+def navigate_to(page_name):
+    st.session_state.active_page = page_name
+
+# ──────────────────────────────────────
+# Sidebar Navigation (UNLOCKABLE)
+# ──────────────────────────────────────
+with st.sidebar:
+    st.markdown('<div class="nav-header">', unsafe_allow_html=True)
+    st.markdown(f'<div style="font-size: 3.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 15px #6366f1);">🧠</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="color:#e2e8f0; font-weight:800; font-size:1.4rem; letter-spacing:1px;">CORE ENGINE</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Define pages and their required states
+    all_pages = [
+        {"name": "Dashboard", "icon": "📊", "unlocked": True},
+        {"name": "Analytics", "icon": "🔍", "unlocked": True},
+        {"name": "Prediction", "icon": "📈", "unlocked": "scan_complete"},
+        {"name": "Automation", "icon": "⚡", "unlocked": "prediction_viewed"},
+        {"name": "Intelligence", "icon": "💬", "unlocked": "workflow_triggered"}
+    ]
+    
+    for p in all_pages:
+        unlocked = True
+        if isinstance(p["unlocked"], str):
+            unlocked = st.session_state.get(p["unlocked"], False)
+        
+        if unlocked:
+            is_active = "nav-item-active" if st.session_state.active_page == p["name"] else ""
+            if st.button(f"{p['icon']} {p['name']}", key=f"nav_{p['name']}", use_container_width=True):
+                st.session_state.active_page = p["name"]
+                st.rerun()
+        else:
+            st.button(f"🔒 {p['name']}", key=f"nav_locked_{p['name']}", use_container_width=True, disabled=True)
+    
+    st.sidebar.divider()
+    selected_zone = st.selectbox(
+        "🌍 Analysis Cluster",
+        options=ZONES,
+        index=ZONES.index(st.session_state.selected_zone),
+        key="zone_picker",
+    )
+    if selected_zone != st.session_state.selected_zone:
+        st.session_state.selected_zone = selected_zone
+        st.session_state.scan_complete = False
+        st.session_state.prediction_viewed = False
+        st.session_state.workflow_triggered = False
 
 # ──────────────────────────────────────
 # Data Loading
@@ -58,123 +111,140 @@ except FileNotFoundError:
     st.stop()
 
 # ──────────────────────────────────────
-# Sidebar Navigation (Professional Style)
+# Page Router
 # ──────────────────────────────────────
-with st.sidebar:
-    st.markdown("""
-    <div style="padding: 1rem 0; text-align:center; margin-bottom: 2rem;">
-        <span style="font-size: 3rem;">🧠</span>
-        <h2 style="color:white; font-weight:300; letter-spacing: 0.1em; font-size: 1.1rem; margin-top:1rem;">CORE AI ENGINE</h2>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    selected_page = option_menu(
-        menu_title=None,
-        options=["Dashboard", "Inventory", "Supply Chain", "Sentiment"],
-        icons=["columns-gap", "box-seam", "truck", "chat-square-text"],
-        menu_icon="cast",
-        default_index=0,
-        styles={
-            "container": {"padding": "0!important", "background-color": "#0F172A"},
-            "icon": {"color": "#64748B", "font-size": "1.1rem"}, 
-            "nav-link": {
-                "font-size": "0.95rem", 
-                "text-align": "left", 
-                "margin": "0px", 
-                "color": "#94A3B8",
-                "padding": "12px 20px",
-                "font-family": "'Inter', sans-serif"
-            },
-            "nav-link-selected": {"background-color": "#1E293B", "color": "#10B981", "font-weight": "600"},
-        }
-    )
-    
-    st.sidebar.markdown("<br><br>", unsafe_allow_html=True)
-    st.sidebar.markdown(f'<p style="color:#64748B; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; padding-left:20px;">Cluster Node</p>', unsafe_allow_html=True)
-    
-    selected_zone = st.sidebar.selectbox(
-        "Cluster",
-        options=ZONES,
-        index=ZONES.index(st.session_state.selected_zone),
-        label_visibility="collapsed"
-    )
-    if selected_zone != st.session_state.selected_zone:
-        st.session_state.selected_zone = selected_zone
-        st.session_state.scan_complete = False
-        st.rerun()
+render_ai_header(APP_TITLE, APP_SUBTITLE)
 
-# ──────────────────────────────────────
-# Main Application Layout (1-3-1 Density)
-# ──────────────────────────────────────
-_, main_col, _ = st.columns([1, 3, 1])
-
-with main_col:
-    render_ai_header(APP_TITLE, APP_SUBTITLE)
+if st.session_state.active_page == "Dashboard":
+    # --- DASHBOARD PAGE ---
+    stats = get_zone_stats(dist_df, sku_df, ops_df, st.session_state.selected_zone)
+    render_overview_cards(stats)
+    render_layer_status()
+    render_divider()
     
-    if selected_page == "Dashboard":
-        # --- DASHBOARD PAGE ---
-        stats = get_zone_stats(dist_df, sku_df, ops_df, st.session_state.selected_zone)
-        render_overview_cards(stats)
-        
-        c1, c2 = st.columns([2, 1])
-        
-        with c1:
-            st.markdown("### 📊 Behaviour Monitor")
-            if not st.session_state.scan_complete:
-                st.info("System is ready. Initiate neural scan to begin analysis.")
-                if st.button("🚀 INITIATE NEURAL SCAN"):
-                    with st.spinner("Processing Neural Layers..."):
-                        time.sleep(1.5)
-                    st.session_state.scan_complete = True
-                    st.rerun()
+    # Premium Operational Panels (MATCHING USER SCREENSHOT STYLE)
+    st.markdown("<h3 style='margin-bottom: 2rem;'>🛠 OPERATIONAL CONTROL PANELS</h3>", unsafe_allow_html=True)
+    c1, c2 = st.columns(2)
+    
+    with c1:
+        st.markdown(f"""
+        <div class="redirect-panel">
+            <div class="panel-icon">🔍</div>
+            <div class="panel-title">Neural Behaviour Scan</div>
+            <div class="panel-desc">Execute multi-layer audit of {st.session_state.selected_zone} cluster across 12,000+ data points.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🚀 INITIATE SYSTEM SCAN", use_container_width=True, key="btn_scan"):
+            st.session_state.active_page = "Analytics"
+            st.rerun()
             
-            if st.session_state.scan_complete:
-                alerts, anomaly_df, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
-                if not alerts:
-                    render_no_anomaly(st.session_state.selected_zone)
-                else:
-                    for alert in alerts:
-                        render_alert_card(alert)
-                    st.session_state.prediction_unlocked = True
-            
-        with c2:
-            st.markdown("### 🧠 Live Intelligence")
-            intelligence_news = [
-                {"icon": "📈", "title": f"{st.session_state.selected_zone} Sales Drift", "desc": "Secondary sales show 4% volatility", "status": "Warning"},
-                {"icon": "📦", "title": "Stock Reliability", "desc": "South Hub inventory at 98%", "status": "Optimal"},
-                {"icon": "🌍", "title": "Market Sentiment", "desc": "Competitor pricing pressure detected", "status": "Risk"},
-                {"icon": "⚡", "title": "System Latency", "desc": "Data ingestion node: 24ms", "status": "Optimal"}
-            ]
-            render_sentiment_feed(intelligence_news)
+    with c2:
+        st.markdown("""
+        <div class="redirect-panel">
+            <div class="panel-icon">⚡</div>
+            <div class="panel-title">Automation Stack</div>
+            <div class="panel-desc">Access corrective execution layer. Reserved for high-confidence anomalies.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        automation_unlocked = st.session_state.get("prediction_viewed", False)
+        if st.button("🔧 OPEN AUTOMATION LAYER" if automation_unlocked else "🔒 LAYER LOCKED", 
+                     use_container_width=True, key="btn_auto", disabled=not automation_unlocked):
+            st.session_state.active_page = "Automation"
+            st.rerun()
 
-        if st.session_state.get("prediction_unlocked", False):
-            render_divider()
-            st.markdown("### 🔮 Risk Prediction Projection")
-            # Logic for prediction charts goes here (Enterprise style transitions)
-            st.info("Predictive models show potential recovery in 14 days if workflows are triggered.")
-            if st.button("🛠 TRIGGER MITIGATION"):
-                st.success("Workflows deployed. Access 'Supply Chain' for delivery tracking.")
+elif st.session_state.active_page == "Analytics":
+    # --- ANALYTICS / MONITORING PAGE ---
+    st.markdown("### 🔍 Cluster Behaviour Analysis")
+    
+    if not st.session_state.scan_complete:
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        for i in range(100):
+            time.sleep(0.01)
+            progress_bar.progress(i + 1)
+            if i % 25 == 0:
+                status_text.markdown(f'<div class="scanning-text">🔄 Processing Neural Layer {i//25 + 1}...</div>', unsafe_allow_html=True)
+        st.session_state.scan_complete = True
+        status_text.empty()
+        progress_bar.empty()
 
-    elif selected_page == "Inventory":
-        st.markdown("### 📦 Inventory Intelligence")
-        st.write("Production-ready inventory tables and SKU tracking models...")
-        st.markdown('<div class="dataframe-container">', unsafe_allow_html=True)
-        st.dataframe(sku_df.head(10), use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+    alerts, anomaly_df, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    if not alerts:
+        render_no_anomaly(st.session_state.selected_zone)
+    else:
+        for alert in alerts:
+            render_alert_card(alert)
+        st.markdown("### 📊 Anomaly Root Cause Charts")
+        render_root_cause_tab(alerts[0], anomaly_df)
+        
+        # REDIRECTION TO PREDICTION
+        st.markdown(f"""
+        <div class="redirect-panel" style="border-color: #8b5cf6;">
+            <div class="panel-icon">📈</div>
+            <div class="panel-title">Prediction Intelligence</div>
+            <div class="panel-desc">Model the ripple effect of this {st.session_state.selected_zone} anomaly over the next 30 days.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🔮 GENERATE RISK FORECAST", use_container_width=True):
+            st.session_state.active_page = "Prediction"
+            st.session_state.prediction_viewed = True
+            st.rerun()
 
-    elif selected_page == "Supply Chain":
-        st.markdown("### 🚚 Supply Chain Node Tracking")
-        st.write("Active node management and logistics latency analysis...")
-        st.markdown('<div class="dataframe-container">', unsafe_allow_html=True)
-        st.dataframe(dist_df.head(10), use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+elif st.session_state.active_page == "Prediction":
+    # --- PREDICTION PAGE ---
+    st.markdown("### 📈 Predictive Intelligence Output")
+    st.session_state.prediction_viewed = True
+    alerts, _, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    if alerts:
+        render_predictive_tab(alerts[0], ops_df, dist_df)
+        
+        # REDIRECTION TO AUTOMATION
+        st.markdown(f"""
+        <div class="redirect-panel" style="border-color: #ec4899;">
+            <div class="panel-icon">⚡</div>
+            <div class="panel-title">Corrective Automation</div>
+            <div class="panel-desc">Trigger AI-led workflows to mitigate the predicted 7.2% margin impact.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🛠 TRIGGER MITIGATION WORKFLOW", use_container_width=True):
+            st.session_state.active_page = "Automation"
+            st.rerun()
+    else:
+        st.info("No active anomalies detected in current cluster.")
 
-    elif selected_page == "Sentiment":
-        st.markdown("### 💬 Market Sentiment Interface")
-        st.write("AI-Generated news feeds and external signal monitoring...")
-        render_sentiment_feed([
-            {"icon": "🐦", "title": "Cluster Social Signal", "desc": "High distributor engagement in North sector", "status": "Optimal"},
-            {"icon": "📉", "title": "Competitor Price Index", "desc": "Dropped by 8% in competitor cluster", "status": "Risk"}
-        ] * 3)
+elif st.session_state.active_page == "Intelligence":
+    # --- CHAT PAGE ---
+    st.markdown("### 💬 Neural Chat Interface")
+    alerts, _, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    if alerts:
+        render_chat_tab(alerts[0], ops_df)
+    else:
+        st.info("Central Intelligence is idle.")
 
-    render_ai_footer()
+elif st.session_state.active_page == "Automation":
+    # --- AUTOMATION PAGE ---
+    st.markdown("### ⚡ Execution & Strategy Layer")
+    alerts, _, _ = run_behaviour_scan(ops_df, dist_df, st.session_state.selected_zone)
+    if alerts:
+        render_workflow_tab(alerts[0])
+        st.session_state.workflow_triggered = True
+        
+        # REDIRECTION TO AI CHAT
+        st.markdown(f"""
+        <div class="redirect-panel" style="border-color: #10b981;">
+            <div class="panel-icon">💬</div>
+            <div class="panel-title">AI Intelligence Oracle</div>
+            <div class="panel-desc">Connect with the Neural Oracle to ask specific questions about the automated strategy.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("🧠 CONSULT NEURAL ORACLE", use_container_width=True):
+            st.session_state.active_page = "Intelligence"
+            st.rerun()
+    else:
+        st.success("Operational thresholds optimal. No workflows pending.")
+
+render_divider()
+render_ai_footer()
+
+render_divider()
+render_ai_footer()
