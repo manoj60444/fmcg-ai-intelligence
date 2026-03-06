@@ -1,3 +1,6 @@
+import streamlit as st
+import os
+
 """
 FMCG AI Layers Demo - Configuration & Constants
 """
@@ -70,3 +73,16 @@ LAYERS = [
     {"name": "Automation", "icon": "⚡"},
     {"name": "Presentation", "icon": "🖥️"},
 ]
+# ============================================================
+# AI CORE CONFIGURATION
+# ============================================================
+# Use Streamlit Secrets for deployment (local: .streamlit/secrets.toml)
+# If not found, it will look for the user's provided key or environment variable.
+import os
+
+try:
+    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+except:
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "YOUR_OPENAI_API_KEY_HERE")
+
+OPENAI_MODEL = "gpt-4o"
