@@ -74,15 +74,14 @@ LAYERS = [
     {"name": "Presentation", "icon": "🖥️"},
 ]
 # ============================================================
-# AI CORE CONFIGURATION
+# AI CORE CONFIGURATION (GEMINI)
 # ============================================================
 # Use Streamlit Secrets for deployment (local: .streamlit/secrets.toml)
-# If not found, it will look for the user's provided key or environment variable.
 import os
 
 try:
-    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 except:
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "YOUR_OPENAI_API_KEY_HERE")
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE")
 
-OPENAI_MODEL = "gpt-4o"
+GEMINI_MODEL = "gemini-1.5-flash"

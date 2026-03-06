@@ -7,7 +7,7 @@ This repository contains the **FMCG Operational Intelligence Engine**, a high-en
 ## 🛠 Prerequisites & Setup
 
 ### 1. API Credentials & Configuration
-The system requires an OpenAI API key for the **Conversational Intelligence** and **Root Cause Explanation** layers. 
+The system requires a Google Gemini API key for the **Conversational Intelligence** and **Root Cause Explanation** layers. 
 
 > [!IMPORTANT]
 > To keep the system secure, provide your API key via **Streamlit Secrets** or an environment variable.
@@ -15,7 +15,7 @@ The system requires an OpenAI API key for the **Conversational Intelligence** an
 **How to add your key:**
 1. **Local Development**: Create a `.streamlit/secrets.toml` file in the root directory and add:
    ```toml
-   OPENAI_API_KEY = "sk-proj-8Gwg... (your key)"
+   GEMINI_API_KEY = "AIzaSy... (your key)"
    ```
 2. **Cloud Deployment**: Go to your Streamlit Cloud dashboard → **Settings** → **Secrets** and add the key there.
 

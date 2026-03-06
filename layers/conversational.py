@@ -1,18 +1,19 @@
 """
 Layer 4: Conversational AI
-Integrates with OpenAI ChatGPT to provide intelligent, context-aware responses.
+Integrates with Google Gemini to provide intelligent, context-aware responses.
 """
 
-from openai import OpenAI
-from config.settings import OPENAI_API_KEY, OPENAI_MODEL
+import google.generativeai as genai
+from config.settings import GEMINI_API_KEY, GEMINI_MODEL
 
-# Initialize OpenAI Client
-client = OpenAI(api_key=OPENAI_API_KEY)
+# Configure Gemini
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel(GEMINI_MODEL)
 
 def get_demo_responses(alert, ops_count):
     """
     Return a dict of keyword-pattern → response for the chat layer.
-    These are still used for quick-button suggestions.
+    Used for quick-button suggestions.
     """
     zone = alert['Zone']
     responses = {
@@ -24,15 +25,15 @@ def get_demo_responses(alert, ops_count):
 
 def match_response(user_input, demo_responses, alert):
     """
-    Calls OpenAI GPT-4o to provide real-time intelligence based on the app's context.
+    Calls Google Gemini to provide real-time intelligence based on context.
     """
     try:
         # Create a detailed system prompt with the current alert context
         system_prompt = f"""
         You are the FMCG Operational Intelligence Oracle. 
-        You are currently analyzing an anomaly in the {alert['Zone']} Zone.
+        Analyze the anomaly in the {alert['Zone']} Zone.
         
-        CONTEXT DATA:
+        CONTEXT:
         - Zone: {alert['Zone']}
         - Cluster: {alert['Cluster']}
         - Distributors Affected: {alert['Distributors_Affected']}
@@ -41,29 +42,17 @@ def match_response(user_input, demo_responses, alert):
         - Confidence Score: {alert['Confidence']}
         - Projected Revenue Risk: {alert['Projected_Risk']}
         
-        BEHAVIOUR SIGNATURE:
-        The system has detected synchronized sales drops linked to scheme deactivations, 
-        increased competitor pricing, and distributor credit stress.
-        
-        YOUR MISSION:
+        YOUR ROLE:
         - Provide high-end, professional, and data-driven answers.
-        - Use professional metrics and FMCG terminology.
-        - Be concise but insightful.
+        - Use metrics and professional FMCG terminology.
         - Format your response using clean Markdown.
-        - If the user asks for corrective actions, focus on Scheme Reactivation, Field Force Deployment, and Credit Restructuring.
         """
 
-        response = client.chat.completions.create(
-            model=OPENAI_MODEL,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_input}
-            ],
-            temperature=0.7,
-            max_tokens=800
-        )
+        # Generate content using Gemini
+        msg = f"{system_prompt}\n\nUSER QUESTION: {user_input}"
+        response = model.generate_content(msg)
         
-        return response.choices[0].message.content
+        return response.text
 
     except Exception as e:
-        return f"⚠️ **AI Connection Error:** {str(e)}\n\n*Please ensure your API key is valid and you have an active internet connection.*"
+        return f"⚠️ **AI Connection Error (Gemini):** {str(e)}\n\n*Please ensure your API key is valid.*"
