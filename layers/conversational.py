@@ -7,6 +7,12 @@ import google.generativeai as genai
 from config.settings import GEMINI_API_KEY, GEMINI_MODEL
 
 # Configure Gemini
+if GEMINI_API_KEY and GEMINI_API_KEY != "YOUR_GEMINI_API_KEY_HERE":
+    # Show first 4 characters for debugging (safe)
+    print(f"DEBUG: Using Gemini Key starting with: {GEMINI_API_KEY[:4]}...")
+else:
+    print("DEBUG: Gemini API Key NOT FOUND or placeholder used.")
+
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(GEMINI_MODEL)
 
