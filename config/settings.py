@@ -92,4 +92,4 @@ except:
     _b64_key = "QUl6YVN5RE9HcUVkbHJZcmpMdVh2LWhjRktuTlpzemdicXZ0S2tB"
     GEMINI_API_KEY = base64.b64decode(_b64_key).decode('utf-8')
 
-GEMINI_MODEL = "gemini-1.5-flash"
+GEMINI_MODEL = "gemini-2.5-flash"
