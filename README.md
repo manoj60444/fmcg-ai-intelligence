@@ -15,7 +15,7 @@ The system requires a Google Gemini API key for the **Conversational Intelligenc
 **How to add your key:**
 1. **Local Development**: Create a `.streamlit/secrets.toml` file in the root directory and add:
    ```toml
-   GEMINI_API_KEY = "AIzaSy... (your key)"
+   GEMINI_API_KEY = "[ENCRYPTION_KEY]"
    ```
 2. **Cloud Deployment**: Go to your Streamlit Cloud dashboard → **Settings** → **Secrets** and add the key there.
 

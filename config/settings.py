@@ -83,7 +83,9 @@ import streamlit as st
 # Trying to load from st.secrets first (Cloud Deployment)
 # If failing, it falls back to a safely-encoded local key
 try:
-    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+    _key = st.secrets["GEMINI_API_KEY"]
+    # Remove any accidental whitespace or newlines from secrets
+    GEMINI_API_KEY = _key.strip().strip('"').strip("'")
 except:
     # Safely encoded Gemini Key to avoid Github Secret scanning block
     # Decoding 'QUl6YVN5RE9HcUVkbHJZcmpMdVh2LWhjRktuTlpzemdicXZ0S2tB'
