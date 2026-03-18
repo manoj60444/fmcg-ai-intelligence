@@ -1,880 +1,595 @@
 """
-UI Styles – Premium AI-powered CSS for the FMCG Intelligence System.
-Features: animated neural particles, glassmorphism, neon glow effects,
-futuristic typography, cyber-grid backgrounds, and premium micro-animations.
+UI Styles – Clean, Corporate, Operational Intelligence System.
+Per PDF requirements:
+  ✅ White background, clean alert cards, structured text, simple line charts
+  ❌ No dark themes, no animated dashboards, no startup-looking UI, no KPI tiles
 """
 
 CUSTOM_CSS = """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
     /* ============================================================
-       CORE APP & BACKGROUND
+       CORE — Clean White Corporate Background
        ============================================================ */
     .stApp {
-        background: #050510;
-        font-family: 'Outfit', sans-serif;
-        overflow-x: hidden;
+        background: #ffffff;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #1a1a2e;
     }
 
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* ---------- Sidebar Styling ---------- */
+    /* ============================================================
+       SIDEBAR — Professional Navy
+       ============================================================ */
     [data-testid="stSidebar"] {
-        background: rgba(10, 10, 20, 0.95);
-        border-right: 1px solid rgba(99, 102, 241, 0.2);
-        backdrop-filter: blur(20px);
+        background: #1a1a2e;
+        border-right: 1px solid #e5e7eb;
     }
-    [data-testid="stSidebar"] .stSelectbox {
-        margin-top: 2rem;
-    }
-    
-    .nav-header {
-        text-align: center;
-        padding: 2rem 0;
-        border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-        margin-bottom: 2rem;
-    }
-    .nav-item {
-        padding: 12px 20px;
-        margin: 8px 12px;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: #94a3b8;
-        font-weight: 500;
-        text-decoration: none;
-    }
-    .nav-item:hover {
-        background: rgba(99, 102, 241, 0.1);
-        color: #a78bfa;
-        transform: translateX(5px);
-    }
-    .nav-item-active {
-        background: linear-gradient(90deg, rgba(99,102,241,0.2), transparent);
-        border-left: 3px solid #6366f1;
-        color: #e2e8f0;
+    [data-testid="stSidebar"] .stSelectbox label {
+        color: #94a3b8 !important;
     }
 
-    /* Animated cyber-grid overlay */
-    .stApp::before {
-        content: '';
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background:
-            linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
-        background-size: 60px 60px;
-        pointer-events: none;
-        z-index: 0;
-        animation: gridPulse 8s ease-in-out infinite;
-    }
-    @keyframes gridPulse {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 0.7; }
+    .nav-header {
+        text-align: center;
+        padding: 2rem 1rem 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        margin-bottom: 1.5rem;
     }
 
     /* ============================================================
-       ANIMATED HEADER SECTION
+       HEADER — Corporate, minimal
        ============================================================ */
     .ai-header-container {
-        position: relative;
         text-align: center;
-        padding: 2.5rem 2rem 1.5rem;
-        margin-bottom: 1rem;
-        overflow: hidden;
-    }
-    .ai-header-container::before {
-        content: '';
-        position: absolute;
-        top: -50%; left: -50%;
-        width: 200%; height: 200%;
-        background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
-        animation: headerGlow 6s ease-in-out infinite;
-        pointer-events: none;
-    }
-    @keyframes headerGlow {
-        0%, 100% { transform: scale(1); opacity: 0.5; }
-        50% { transform: scale(1.1); opacity: 1; }
+        padding: 2rem 2rem 1rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid #f1f5f9;
     }
 
-    /* AI Badge */
     .ai-badge {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15));
-        border: 1px solid rgba(139,92,246,0.3);
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
         border-radius: 50px;
-        padding: 6px 18px;
-        font-size: 0.7rem;
+        padding: 5px 16px;
+        font-size: 0.68rem;
         font-weight: 600;
-        color: #a78bfa;
-        letter-spacing: 3px;
+        color: #166534;
+        letter-spacing: 2px;
         text-transform: uppercase;
-        margin-bottom: 1rem;
-        backdrop-filter: blur(10px);
-        animation: badgeFloat 3s ease-in-out infinite;
+        margin-bottom: 0.8rem;
     }
     .ai-badge .pulse-dot {
         width: 6px; height: 6px;
         border-radius: 50%;
         background: #22c55e;
-        box-shadow: 0 0 8px rgba(34,197,94,0.8);
-        animation: dotPulse 1.5s ease-in-out infinite;
+        animation: dotPulse 2s ease-in-out infinite;
     }
     @keyframes dotPulse {
         0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.4); opacity: 0.6; }
-    }
-    @keyframes badgeFloat {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-3px); }
+        50% { transform: scale(1.3); opacity: 0.6; }
     }
 
-    /* Main Title */
     .main-title {
-        position: relative;
         text-align: center;
-        font-size: 3.2rem;
-        font-weight: 900;
-        background: linear-gradient(135deg, #818cf8 0%, #a78bfa 25%, #c084fc 50%, #e879f9 75%, #818cf8 100%);
-        background-size: 200% 200%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 0.3rem;
-        letter-spacing: -1.5px;
-        animation: titleShimmer 4s ease-in-out infinite;
-        text-shadow: none;
-    }
-    @keyframes titleShimmer {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 0.2rem;
+        letter-spacing: -0.5px;
     }
 
     .sub-title {
         text-align: center;
-        font-size: 0.9rem;
-        color: #64748b;
-        margin-bottom: 0.5rem;
-        font-weight: 400;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-    }
-
-    /* Neural network line under header */
-    .neural-line {
-        width: 200px;
-        height: 2px;
-        margin: 1rem auto;
-        background: linear-gradient(90deg, transparent, #6366f1, #a855f7, #6366f1, transparent);
-        border-radius: 2px;
-        animation: neuralPulse 3s ease-in-out infinite;
-    }
-    @keyframes neuralPulse {
-        0%, 100% { opacity: 0.4; width: 200px; }
-        50% { opacity: 1; width: 300px; }
-    }
-
-    /* ============================================================
-       OVERVIEW KPI CARDS – Glassmorphism
-       ============================================================ */
-    .overview-container {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin: 1.5rem 0;
-        flex-wrap: wrap;
-        padding: 0 1rem;
-    }
-    .overview-card {
-        position: relative;
-        background: rgba(15, 18, 35, 0.6);
-        border: 1px solid rgba(99,102,241,0.15);
-        border-radius: 20px;
-        padding: 1.4rem 1.8rem;
-        text-align: center;
-        min-width: 170px;
-        flex: 1;
-        max-width: 220px;
-        backdrop-filter: blur(20px);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-    }
-    .overview-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: linear-gradient(135deg, rgba(99,102,241,0.05), transparent);
-        border-radius: 20px;
-        pointer-events: none;
-    }
-    .overview-card::after {
-        content: '';
-        position: absolute;
-        top: -1px; left: -1px;
-        right: -1px; bottom: -1px;
-        border-radius: 20px;
-        background: linear-gradient(135deg, rgba(99,102,241,0.3), transparent, rgba(168,85,247,0.3));
-        z-index: -1;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-    .overview-card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(139,92,246,0.4);
-        box-shadow:
-            0 12px 40px rgba(99,102,241,0.2),
-            0 0 30px rgba(139,92,246,0.1),
-            inset 0 1px 0 rgba(255,255,255,0.05);
-    }
-    .overview-card:hover::after { opacity: 1; }
-    
-    .overview-icon {
-        font-size: 1.4rem;
-        margin-bottom: 0.3rem;
-        filter: drop-shadow(0 0 8px rgba(139,92,246,0.5));
-    }
-    .overview-number {
-        font-size: 2.2rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #c084fc, #818cf8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1.2;
-    }
-    .overview-label {
-        font-size: 0.72rem;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-top: 6px;
-        font-weight: 500;
-    }
-
-    /* ============================================================
-       AI LAYER STATUS PIPELINE
-       ============================================================ */
-    .layer-pipeline {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0;
-        margin: 1.5rem auto;
-        padding: 1rem;
-        max-width: 900px;
-        flex-wrap: wrap;
-    }
-    .layer-node {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        padding: 10px 14px;
-        background: rgba(15,18,35,0.7);
-        border: 1px solid rgba(99,102,241,0.2);
-        border-radius: 14px;
-        min-width: 110px;
-        transition: all 0.3s ease;
-        position: relative;
-        cursor: default;
-    }
-    .layer-node:hover {
-        border-color: rgba(139,92,246,0.5);
-        background: rgba(99,102,241,0.08);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(99,102,241,0.15);
-    }
-    .layer-node-icon { font-size: 1.3rem; }
-    .layer-node-name {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
         color: #94a3b8;
-        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        letter-spacing: 3px;
         text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    .layer-node-status {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 0.6rem;
-        color: #4ade80;
-        font-weight: 600;
-    }
-    .layer-node-status .dot {
-        width: 5px; height: 5px;
-        border-radius: 50%;
-        background: #22c55e;
-        box-shadow: 0 0 6px rgba(34,197,94,0.8);
-        animation: dotPulse 2s ease-in-out infinite;
-    }
-    .layer-connector {
-        width: 30px;
-        height: 2px;
-        background: linear-gradient(90deg, rgba(99,102,241,0.4), rgba(168,85,247,0.4));
-        position: relative;
-        flex-shrink: 0;
-    }
-    .layer-connector::after {
-        content: '';
-        position: absolute;
-        right: -3px; top: -3px;
-        width: 8px; height: 8px;
-        border-top: 2px solid rgba(139,92,246,0.5);
-        border-right: 2px solid rgba(139,92,246,0.5);
-        transform: rotate(45deg);
     }
 
     /* ============================================================
-       ALERT CARD – cyberpunk style
+       ALERT CARD — Clean white with red accent (NOT cyberpunk)
+       Per PDF: "Clear alert cards"
        ============================================================ */
     .alert-card {
         position: relative;
-        background: rgba(239,68,68,0.04);
-        border: 1px solid rgba(239,68,68,0.2);
-        border-radius: 20px;
-        padding: 1.8rem 2rem;
-        margin: 1.5rem auto;
+        background: #ffffff;
+        border: 1px solid #fecaca;
+        border-left: 4px solid #dc2626;
+        border-radius: 8px;
+        padding: 1.5rem 1.8rem;
+        margin: 1.2rem auto;
         max-width: 850px;
-        overflow: hidden;
-        animation: alertSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        backdrop-filter: blur(15px);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+        animation: alertFadeIn 0.5s ease;
     }
-    @keyframes alertSlideIn {
-        0% { opacity: 0; transform: translateY(20px) scale(0.98); }
-        100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .alert-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 3px; height: 100%;
-        background: linear-gradient(180deg, #ef4444, #f97316, #ef4444);
-        animation: alertBarPulse 2s ease-in-out infinite;
-    }
-    @keyframes alertBarPulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-    .alert-card::after {
-        content: '';
-        position: absolute;
-        top: -50%; right: -20%;
-        width: 60%; height: 200%;
-        background: radial-gradient(ellipse, rgba(239,68,68,0.05), transparent 70%);
-        pointer-events: none;
+    @keyframes alertFadeIn {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 
     .alert-header {
         display: flex;
         align-items: center;
         gap: 12px;
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
     }
     .alert-badge {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: linear-gradient(135deg, #dc2626, #ef4444);
+        background: #dc2626;
         color: white;
-        padding: 5px 14px;
-        border-radius: 30px;
+        padding: 4px 12px;
+        border-radius: 4px;
         font-size: 0.65rem;
         font-weight: 700;
-        letter-spacing: 1.5px;
+        letter-spacing: 1px;
         text-transform: uppercase;
-        animation: alertBlink 2s ease-in-out infinite;
-        box-shadow: 0 0 20px rgba(239,68,68,0.3);
-    }
-    @keyframes alertBlink {
-        0%, 100% { opacity: 1; box-shadow: 0 0 20px rgba(239,68,68,0.3); }
-        50% { opacity: 0.8; box-shadow: 0 0 30px rgba(239,68,68,0.5); }
     }
     .alert-title {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 700;
-        color: #fca5a5;
-        letter-spacing: -0.3px;
+        color: #991b1b;
     }
     .alert-details {
         display: flex;
-        gap: 1.2rem;
-        margin-top: 1.2rem;
+        gap: 1rem;
+        margin-top: 1rem;
         flex-wrap: wrap;
     }
     .alert-metric {
         text-align: center;
-        background: rgba(239,68,68,0.06);
-        border: 1px solid rgba(239,68,68,0.12);
-        border-radius: 14px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
         padding: 0.8rem 1.2rem;
         min-width: 130px;
         flex: 1;
-        transition: all 0.3s ease;
-    }
-    .alert-metric:hover {
-        background: rgba(239,68,68,0.1);
-        border-color: rgba(239,68,68,0.3);
-        transform: translateY(-2px);
     }
     .alert-metric-value {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: 800;
-        color: #f87171;
+        color: #dc2626;
         font-family: 'JetBrains Mono', monospace;
     }
     .alert-metric-label {
         font-size: 0.7rem;
-        color: #fca5a5;
+        color: #991b1b;
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-top: 4px;
+        margin-top: 2px;
         font-weight: 500;
     }
 
     /* ============================================================
-       TABS – glowing neon style
+       DETECTION BANNER — System auto-detected (show FIRST)
+       Per PDF: "Behavioural Drift Detected" first
        ============================================================ */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 6px;
-        background: rgba(10, 12, 25, 0.7);
-        padding: 6px;
-        border-radius: 16px;
-        border: 1px solid rgba(99,102,241,0.1);
-        backdrop-filter: blur(10px);
+    .detection-banner {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-left: 4px solid #f59e0b;
+        border-radius: 8px;
+        padding: 1.2rem 1.5rem;
+        margin: 1rem auto;
+        max-width: 850px;
+        animation: alertFadeIn 0.6s ease;
     }
-    .stTabs [data-baseweb="tab"] {
-        background: transparent;
-        border-radius: 12px;
-        color: #64748b;
-        font-weight: 600;
-        font-size: 0.85rem;
-        padding: 10px 20px;
-        transition: all 0.3s ease;
-        border: 1px solid transparent;
+    .detection-banner .detection-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #92400e;
+        margin-bottom: 0.3rem;
     }
-    .stTabs [data-baseweb="tab"]:hover {
-        color: #a78bfa;
-        background: rgba(99,102,241,0.05);
-    }
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2)) !important;
-        color: #c4b5fd !important;
-        border: 1px solid rgba(139,92,246,0.3) !important;
-        box-shadow: 0 0 20px rgba(99,102,241,0.15);
+    .detection-banner .detection-body {
+        font-size: 0.88rem;
+        color: #78350f;
+        line-height: 1.6;
     }
 
     /* ============================================================
-       ROOT CAUSE SECTION
+       REASONING BLOCK — Structured text, per PDF
        ============================================================ */
-    .root-cause-card {
-        background: rgba(15,18,35,0.6);
-        border: 1px solid rgba(251,191,36,0.2);
-        border-radius: 16px;
+    .reasoning-block {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
         padding: 1.5rem;
-        margin: 1rem 0;
-        backdrop-filter: blur(15px);
-        position: relative;
-        overflow: hidden;
+        margin: 1rem auto;
+        max-width: 850px;
     }
-    .root-cause-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 2px;
-        background: linear-gradient(90deg, transparent, #fbbf24, transparent);
-    }
-    .root-cause-header {
-        font-size: 1.15rem;
+    .reasoning-block .reasoning-header {
+        font-size: 0.95rem;
         font-weight: 700;
-        color: #fbbf24;
-        margin-bottom: 1rem;
+        color: #0f172a;
+        margin-bottom: 0.8rem;
         display: flex;
         align-items: center;
         gap: 8px;
     }
-
-    /* ============================================================
-       BUTTONS – neon glow
-       ============================================================ */
-    div.stButton > button {
-        background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
-        color: white;
-        border: none;
-        padding: 1rem 3rem;
-        border-radius: 14px;
-        font-size: 1rem;
-        font-weight: 700;
-        font-family: 'Outfit', sans-serif;
-        letter-spacing: 1px;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow:
-            0 4px 15px rgba(99,102,241,0.4),
-            0 0 30px rgba(139,92,246,0.15);
-        position: relative;
-        overflow: hidden;
-    }
-    div.stButton > button::before {
-        content: '';
-        position: absolute;
-        top: -50%; left: -50%;
-        width: 200%; height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-        transform: rotate(45deg);
-        transition: all 0.6s ease;
-    }
-    div.stButton > button:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow:
-            0 8px 30px rgba(99,102,241,0.5),
-            0 0 50px rgba(139,92,246,0.2);
-    }
-    div.stButton > button:hover::before {
-        left: 150%;
+    .reasoning-block p, .reasoning-block li {
+        font-size: 0.88rem;
+        color: #334155;
+        line-height: 1.7;
     }
 
     /* ============================================================
-       WEIGHT BARS – animated gradient
+       FINANCIAL IMPACT CARDS — Per PDF: Revenue, Margin, Working Capital
        ============================================================ */
-    .weight-container { margin: 0.8rem 0; }
-    .weight-bar-bg {
-        background: rgba(15,18,35,0.8);
-        border: 1px solid rgba(99,102,241,0.08);
-        border-radius: 10px;
-        height: 32px;
-        overflow: hidden;
-    }
-    .weight-bar-fill {
-        height: 100%;
-        border-radius: 10px;
+    .impact-row {
         display: flex;
-        align-items: center;
-        padding-left: 12px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: white;
+        gap: 1rem;
+        margin: 1rem auto;
+        max-width: 850px;
+        flex-wrap: wrap;
+    }
+    .impact-card {
+        flex: 1;
+        min-width: 200px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.2rem 1.5rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .impact-card .impact-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.3rem;
+    }
+    .impact-card .impact-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #dc2626;
         font-family: 'JetBrains Mono', monospace;
-        animation: barFillIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
     }
-    .weight-bar-fill::after {
-        content: '';
-        position: absolute;
-        top: 0; left: -100%;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-        animation: barShine 3s ease-in-out infinite;
-    }
-    @keyframes barFillIn {
-        0% { width: 0 !important; opacity: 0; }
-        100% { opacity: 1; }
-    }
-    @keyframes barShine {
-        0% { left: -100%; }
-        100% { left: 200%; }
+    .impact-card .impact-note {
+        font-size: 0.78rem;
+        color: #94a3b8;
+        margin-top: 0.2rem;
     }
 
     /* ============================================================
-       PREDICTION CARDS
+       PREDICTION CARD  — Minimal
        ============================================================ */
     .prediction-card {
-        background: rgba(15,18,35,0.6);
-        border: 1px solid rgba(239,68,68,0.15);
-        border-radius: 16px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
         padding: 1.2rem 1.5rem;
         margin: 0.5rem 0;
-        backdrop-filter: blur(15px);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    .prediction-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 2px;
-        background: linear-gradient(90deg, transparent, #ef4444, transparent);
-        opacity: 0.5;
-    }
-    .prediction-card:hover {
-        border-color: rgba(239,68,68,0.3);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(239,68,68,0.1);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
     .prediction-value {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         font-weight: 800;
-        color: #f87171;
+        color: #dc2626;
         font-family: 'JetBrains Mono', monospace;
     }
     .prediction-label {
         font-size: 0.78rem;
-        color: #94a3b8;
+        color: #64748b;
         font-weight: 500;
     }
 
     /* ============================================================
-       CHAT
+       BUTTONS — Corporate, not neon
        ============================================================ */
-    .stChatMessage {
-        background: rgba(15,18,35,0.5) !important;
-        border: 1px solid rgba(99,102,241,0.12) !important;
-        border-radius: 16px !important;
-        backdrop-filter: blur(10px);
+    div.stButton > button {
+        background: #1a1a2e;
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        letter-spacing: 0.5px;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
     }
-    .stChatInput > div {
-        border-color: rgba(99,102,241,0.2) !important;
-        border-radius: 14px !important;
+    div.stButton > button:hover {
+        background: #2d2d4e;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     /* ============================================================
-       SCANNING STATUS
+       WORKFLOW SECTION
+       ============================================================ */
+    .workflow-success {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-left: 4px solid #22c55e;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        margin: 1rem 0;
+    }
+    .workflow-info {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        margin: 1rem 0;
+    }
+
+    /* ============================================================
+       SCANNING STATUS — Simple, corporate
        ============================================================ */
     .scanning-text {
         text-align: center;
-        font-size: 1rem;
-        color: #a78bfa;
+        font-size: 0.9rem;
+        color: #64748b;
         font-weight: 500;
-        animation: scanPulse 1.5s ease-in-out infinite;
-    }
-    @keyframes scanPulse {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 1; }
     }
 
-    /* Progress bar custom */
+    /* Progress bar */
     .stProgress > div > div > div > div {
-        background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899) !important;
-        border-radius: 10px;
+        background: #1a1a2e !important;
+        border-radius: 6px;
     }
 
     /* ============================================================
-       LAYER INDICATOR (in tabs)
+       LAYER STATUS — Simple corporate badges
+       ============================================================ */
+    .layer-pipeline {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+        margin: 1rem auto;
+        padding: 0.8rem;
+        max-width: 900px;
+    }
+    .layer-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 10px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        min-width: 90px;
+    }
+    .layer-node-icon { font-size: 1.1rem; }
+    .layer-node-name {
+        font-size: 0.6rem;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .layer-node-status {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.55rem;
+        color: #16a34a;
+        font-weight: 600;
+    }
+    .layer-node-status .dot {
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: #22c55e;
+        animation: dotPulse 2s ease-in-out infinite;
+    }
+    .layer-connector {
+        width: 30px;
+        height: 2px;
+        background: linear-gradient(90deg, #cbd5e1, #94a3b8, #cbd5e1);
+        flex-shrink: 0;
+    }
+
+    /* ============================================================
+       LAYER INDICATOR (tab headers)
        ============================================================ */
     .layer-indicator {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 6px 16px;
-        border-radius: 30px;
-        font-size: 0.72rem;
+        gap: 6px;
+        padding: 4px 14px;
+        border-radius: 4px;
+        font-size: 0.7rem;
         font-weight: 600;
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
         letter-spacing: 0.5px;
     }
     .layer-active {
-        background: rgba(34,197,94,0.08);
-        border: 1px solid rgba(34,197,94,0.25);
-        color: #4ade80;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
     }
     .status-dot {
-        width: 7px; height: 7px;
+        width: 6px; height: 6px;
         border-radius: 50%;
         background: #22c55e;
-        box-shadow: 0 0 8px rgba(34,197,94,0.8);
         animation: dotPulse 2s ease-in-out infinite;
     }
 
     /* ============================================================
-       DIVIDER – animated gradient line
+       ROOT CAUSE  — Clean
        ============================================================ */
-    .custom-divider {
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(99,102,241,0.25), rgba(168,85,247,0.25), transparent);
-        margin: 2rem 0;
-        position: relative;
+    .root-cause-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+    .root-cause-header {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     /* ============================================================
-       NO-ANOMALY BANNER
+       DIVIDER — Simple
+       ============================================================ */
+    .custom-divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin: 1.5rem 0;
+    }
+
+    /* ============================================================
+       NO ANOMALY BANNER
        ============================================================ */
     .no-anomaly-banner {
-        background: rgba(34,197,94,0.05);
-        border: 1px solid rgba(34,197,94,0.2);
-        border-radius: 20px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
         padding: 2rem;
         margin: 1.5rem auto;
         max-width: 700px;
         text-align: center;
-        backdrop-filter: blur(15px);
-        position: relative;
-        overflow: hidden;
     }
-    .no-anomaly-banner::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 2px;
-        background: linear-gradient(90deg, transparent, #22c55e, transparent);
-    }
-    .no-anomaly-banner .icon { font-size: 2.5rem; }
+    .no-anomaly-banner .icon { font-size: 2rem; }
     .no-anomaly-banner .headline {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 700;
-        color: #4ade80;
+        color: #166534;
         margin-top: 0.5rem;
     }
     .no-anomaly-banner .body {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         color: #64748b;
-        margin-top: 0.5rem;
+        margin-top: 0.4rem;
+        line-height: 1.6;
     }
 
     /* ============================================================
-       ULTRA-PREMIUM BACKGROUND: DEEP OBSIDIAN & NEURAL CLOUD
+       REDIRECT PANELS — Clean corporate
        ============================================================ */
-    .stApp {
-        background: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #030308 100%);
-        background-attachment: fixed;
-        font-family: 'Outfit', sans-serif;
-    }
-
-    /* Floating Data Particles & Neural Network Lines */
-    .stApp::before {
-        content: '';
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background-image: 
-            radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
-            radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
-            url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-        opacity: 0.6;
-        pointer-events: none;
-        z-index: -2;
-    }
-
-    /* Animated Data Stream Background Overlay */
-    @keyframes dataMove {
-        from { background-position: 0 0; }
-        to { background-position: 1000px 1000px; }
-    }
-    .stApp::after {
-        content: '';
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background-image: url('https://user-images.githubusercontent.com/11252171/200147913-c977926b-d336-417c-a4d1-8d26f634dba9.png');
-        background-size: 800px;
-        opacity: 0.05;
-        pointer-events: none;
-        animation: dataMove 120s linear infinite;
-        z-index: -1;
-    }
-
-    /* ---------- Sidebar: AI Command Center ---------- */
-    [data-testid="stSidebar"] {
-        background: rgba(8, 8, 16, 0.95);
-        border-right: 1px solid rgba(99, 102, 241, 0.3);
-        backdrop-filter: blur(30px);
-        box-shadow: 15px 0 50px rgba(0,0,0,0.8);
-    }
-    
-    /* Reveal Sidebar Toggle Styling */
-    [data-testid="stSidebarCollapsedControl"] {
-        background: rgba(99, 102, 241, 0.15) !important;
-        border: 1px solid rgba(99, 102, 241, 0.5) !important;
-        border-radius: 50% !important;
-        left: 10px !important;
-        top: 10px !important;
-        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3) !important;
-    }
-
-    .nav-item {
-        margin: 12px 15px;
-        padding: 18px;
-        border-radius: 18px;
-        background: rgba(20, 25, 45, 0.4);
-        border: 1px solid rgba(99, 102, 241, 0.1);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        color: #94a3b8;
-    }
-    .nav-item:hover {
-        background: rgba(99, 102, 241, 0.15);
-        border-color: #6366f1;
-        color: #e2e8f0;
-        transform: scale(1.05) translateX(5px);
-        box-shadow: -10px 0 20px rgba(99, 102, 241, 0.2);
-    }
-
-    /* ---------- REDIRECT UI PANELS ---------- */
     .redirect-panel {
-        background: linear-gradient(145deg, rgba(20, 25, 45, 0.8), rgba(10, 15, 30, 0.9));
-        border: 1px solid rgba(99, 102, 241, 0.3);
-        border-radius: 28px;
-        padding: 2.5rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.5rem;
         text-align: center;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        margin: 1rem 0;
+        transition: all 0.2s ease;
+        margin: 0.8rem 0;
     }
     .redirect-panel:hover {
-        transform: translateY(-8px) scale(1.02);
-        border-color: #6366f1;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 20px rgba(99, 102, 241, 0.2);
+        border-color: #94a3b8;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
-    .redirect-panel::before {
-        content: '';
-        position: absolute;
-        top: 0; left: -100%;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-        transition: 0.5s;
-    }
-    .redirect-panel:hover::before {
-        left: 100%;
-    }
-    
     .panel-icon {
-        font-size: 3.5rem;
-        margin-bottom: 1.5rem;
-        filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
     }
     .panel-title {
-        color: #e2e8f0;
-        font-size: 1.6rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
+        color: #0f172a;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
     }
     .panel-desc {
         color: #64748b;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
+        line-height: 1.5;
     }
 
-    /* Action Glow Button */
-    .glow-btn {
-        background: linear-gradient(90deg, #6366f1, #8b5cf6);
-        color: white !important;
-        font-weight: 700 !important;
-        padding: 12px 30px !important;
-        border-radius: 50px !important;
-        border: none !important;
-        box-shadow: 0 0 15px rgba(99, 102, 241, 0.5) !important;
-        transition: 0.3s !important;
-        text-transform: uppercase;
+    /* ============================================================
+       CHAT — Clean
+       ============================================================ */
+    .stChatMessage {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+    }
+    .stChatInput > div {
+        border-color: #e2e8f0 !important;
+        border-radius: 6px !important;
+    }
+
+    /* ============================================================
+       FOOTER — Corporate minimal
+       ============================================================ */
+    .ai-footer {
+        text-align: center;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    .ai-footer-line {
+        height: 1px;
+        background: #e2e8f0;
+        margin-bottom: 0.8rem;
+    }
+    .ai-footer-text {
+        font-size: 0.7rem;
+        color: #94a3b8;
         letter-spacing: 1px;
     }
-    .glow-btn:hover {
-        box-shadow: 0 0 30px rgba(99, 102, 241, 0.8) !important;
-        transform: translateY(-2px);
+
+    /* ============================================================
+       WEIGHT BARS — Simple clean progress bars
+       ============================================================ */
+    .weight-container { margin: 0.6rem 0; }
+    .weight-bar-bg {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        height: 28px;
+        overflow: hidden;
+    }
+    .weight-bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: white;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ============================================================
+       TABS — Clean corporate
+       ============================================================ */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 4px;
+        background: #f8fafc;
+        padding: 4px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background: transparent;
+        border-radius: 6px;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #0f172a;
+        background: #ffffff;
+    }
+    .stTabs [aria-selected="true"] {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
 </style>
 """

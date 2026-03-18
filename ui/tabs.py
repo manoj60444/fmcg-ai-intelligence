@@ -1,6 +1,8 @@
 """
-Tab renderers – one function per analysis tab.
-Premium AI-themed tabs with enhanced Plotly charts and styling.
+Tab renderers – one function per analysis layer.
+Per PDF requirements:
+  ✅ Simple line chart for prediction, structured text, bullet format, business-focused
+  ❌ No multiple bar charts, no pie charts, no heat maps, no KPI boxes
 """
 
 import time
@@ -27,67 +29,46 @@ def render_root_cause_tab(alert, anomaly_df):
 
     reasoning, summary = generate_root_cause(alert, anomaly_df)
 
-    st.markdown("### 🧠 AI Root Cause Analysis")
-    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.markdown("#### 🧠 Intelligence Signature: Sales Multi-Factor Analysis")
-    
-    col1, col2 = st.columns([1, 1.2])
-    
-    with col1:
-        # Pie Chart for Contribution weighting
-        labels = ['Stockout', 'Competitive Pricing', 'Scheme Inactivity', 'Credit Hold']
-        values = [45, 25, 20, 10]
-        colors = ['#6366f1', '#a855f7', '#f43f5e', '#fbbf24']
-        
-        pie_fig = go.Figure(data=[go.Pie(
-            labels=labels, 
-            values=values, 
-            hole=.7,
-            marker_colors=colors,
-            textinfo='label+percent'
-        )])
-        pie_fig.update_layout(
-            showlegend=False,
-            height=300,
-            margin=dict(l=0, r=0, t=0, b=0),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color="#94a3b8", size=10)
-        )
-        st.plotly_chart(pie_fig, use_container_width=True)
-        st.markdown("<p style='text-align:center; color:#94a3b8; font-size:0.8rem;'>PRIMARY DRIVER: <b>Stockout Event</b></p>", unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("""
-        <div style='background: rgba(30,41,59,0.4); border-radius: 20px; padding: 1.5rem; border: 1px solid rgba(99,102,241,0.1);'>
-            <div style='color: #6366f1; font-weight: 700; margin-bottom: 1rem;'>🔍 AI CLUSTER INSIGHTS</div>
-            <div style='display: flex; flex-direction: column; gap: 1rem;'>
-                <div style='display: flex; justify-content: space-between; align-items: center;'>
-                    <span style='color: #cbd5e1;'>Cluster Variance</span>
-                    <span style='color: #f43f5e; font-family: monospace;'>+18.4%</span>
-                </div>
-                <div style='display: flex; justify-content: space-between; align-items: center;'>
-                    <span style='color: #cbd5e1;'>Network Contagion</span>
-                    <span style='color: #fbbf24; font-family: monospace;'>MEDIUM</span>
-                </div>
-                <div style='display: flex; justify-content: space-between; align-items: center;'>
-                    <span style='color: #cbd5e1;'>Distributor Health</span>
-                    <span style='color: #22c55e; font-family: monospace;'>SIGNAL STABLE</span>
-                </div>
-            </div>
-            <hr style='border: 0; height: 1px; background: rgba(99,102,241,0.1); margin: 1.5rem 0;'>
-            <p style='color: #94a3b8; font-size: 0.85rem; line-height: 1.6;'>
-                AI detected a synchronized sales drop across the cluster. Primary driver identified as 
-                <b>Logistics Delay</b> combined with competitor <b>Scheme Launch</b> in the same geo-polygon.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("")
-    st.markdown('<div class="root-cause-card">', unsafe_allow_html=True)
+    # Per PDF: "Explain reasoning" — structured text, not chart-heavy
+    st.markdown("#### How Did the System Detect This?")
     st.markdown(
-        '<div class="root-cause-header">'
-        '🧠 AI-Generated Root Cause Explanation</div>',
+        '<div class="reasoning-block">'
+        '<div class="reasoning-header">🔍 Detection Logic</div>'
+        f'<p>The system compares current behaviour with <strong>30-day normal patterns</strong>. '
+        f'When multiple stress indicators — sales deviation ({alert["Sales_Drop"]} drop), '
+        f'credit days increase ({alert["Credit_Increase"]}), and inventory buildup '
+        f'— moved together across {alert["Distributors_Affected"]} distributors in the '
+        f'{alert["Zone"]} zone, the system flagged a <strong>behavioural deviation</strong>.</p>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Root-cause contribution — simple weight bars (NOT pie chart per PDF)
+    st.markdown("#### Contributing Factors")
+    factors = [
+        ("Stockout / Logistics Delay", 45, "#dc2626"),
+        ("Competitive Pricing Pressure", 25, "#f59e0b"),
+        ("Scheme Inactivity", 20, "#6366f1"),
+        ("Credit Hold / Settlement Delay", 10, "#64748b"),
+    ]
+    for label, pct, color in factors:
+        st.markdown(
+            f'<div class="weight-container">'
+            f'<div style="display:flex;justify-content:space-between;margin-bottom:4px;">'
+            f'<span style="font-size:0.82rem;color:#334155;font-weight:500;">{label}</span>'
+            f'<span style="font-size:0.82rem;color:#64748b;font-family:JetBrains Mono,monospace;">{pct}%</span>'
+            f'</div>'
+            f'<div class="weight-bar-bg">'
+            f'<div class="weight-bar-fill" style="width:{pct}%;background:{color};"></div>'
+            f'</div></div>',
+            unsafe_allow_html=True,
+        )
+
+    # AI-generated root cause summary
+    st.markdown("")
+    st.markdown(
+        '<div class="root-cause-card">'
+        '<div class="root-cause-header">AI-Generated Root Cause Explanation</div>',
         unsafe_allow_html=True,
     )
     st.markdown(summary)
@@ -95,7 +76,7 @@ def render_root_cause_tab(alert, anomaly_df):
 
 
 # ─────────────────────────────────────────────
-# TAB 2 – Predictive Impact
+# TAB 2 – Predictive Impact (Risk Projection)
 # ─────────────────────────────────────────────
 def render_predictive_tab(alert, ops_df, dist_df):
     st.markdown(
@@ -105,154 +86,138 @@ def render_predictive_tab(alert, ops_df, dist_df):
         unsafe_allow_html=True,
     )
 
-    st.markdown("### 📈 Predictive Impact Analysis")
+    # Per PDF: "Show Forecast as Risk Projection"
+    st.markdown("#### Risk Projection — If No Action Taken")
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 
     daily_sales, forecast_df, _, margin_comp = generate_forecast(
         ops_df, dist_df, zone=alert['Zone']
     )
 
-    # Metric cards
+    # Financial impact cards — Per PDF: Revenue, Margin, Working Capital
     c1, c2, c3 = st.columns(3)
     with c1:
         st.markdown(f"""
         <div class="prediction-card">
-            <div class="prediction-label">📉 If No Action Taken</div>
+            <div class="prediction-label">📉 Revenue Risk (60-Day)</div>
             <div class="prediction-value">{alert['Projected_Risk']}</div>
-            <div class="prediction-label">Projected Revenue Loss</div>
+            <div class="prediction-label">Projected sales erosion if no corrective action</div>
         </div>""", unsafe_allow_html=True)
     with c2:
         st.markdown(f"""
         <div class="prediction-card">
-            <div class="prediction-label">📊 Margin Impact</div>
+            <div class="prediction-label">📊 Margin Compression</div>
             <div class="prediction-value">{margin_comp:.1f}%</div>
-            <div class="prediction-label">Margin Compression</div>
+            <div class="prediction-label">Impact on operating margin</div>
         </div>""", unsafe_allow_html=True)
     with c3:
-        st.markdown("""
+        st.markdown(f"""
         <div class="prediction-card">
-            <div class="prediction-label">🏢 Spread Risk</div>
-            <div class="prediction-value">Likely High</div>
-            <div class="prediction-label">Market Contagion Rating</div>
+            <div class="prediction-label">💰 Working Capital Impact</div>
+            <div class="prediction-value">{alert['Credit_Increase']}</div>
+            <div class="prediction-label">Credit days deterioration trend</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("")
-    
-    # NEW: Catchy Pie Chart for Risk Distribution
-    st.markdown("#### 🥧 Risk Matrix Distribution")
-    cc1, cc2 = st.columns([1, 2])
-    with cc1:
-        pie_fig = go.Figure(data=[go.Pie(
-            labels=['Sales Loss', 'Margin Compression', 'Inventory Bloat', 'Credit Exposure'],
-            values=[40, 25, 20, 15],
-            hole=.6,
-            marker_colors=['#f87171', '#fbbf24', '#6366f1', '#a855f7']
-        )])
-        pie_fig.update_layout(
-            showlegend=False,
-            height=250,
-            margin=dict(l=0, r=0, t=0, b=0),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-        )
-        st.plotly_chart(pie_fig, use_container_width=True)
-    
-    with cc2:
-        st.markdown("""
-        <div style="padding: 1rem; background: rgba(15,18,35,0.4); border-radius: 12px; height: 100%;">
-            <p style="color: #94a3b8; font-size: 0.9rem;">
-                <b>AI Insight:</b> Most of the risk is concentrated in <b>Sales Loss (40%)</b>. 
-                The system detects that the secondary cause is <b>Margin Compression</b> due to 
-                aggressive competitor pricing in the south cluster.
-            </p>
-            <p style="color: #6366f1; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px;">
-                CONFIDENCE: 94.2%
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
 
-    # Premium Plotly chart
+    # Per PDF: "Simple line chart for prediction" — ONLY one chart, clean
     fig = go.Figure()
 
-    # Historical line with gradient fill
+    # Historical line
     fig.add_trace(go.Scatter(
         x=daily_sales['Date'], y=daily_sales['Sales'],
         mode='lines', name='Historical Sales',
-        line=dict(color='#818cf8', width=2.5, shape='spline'),
+        line=dict(color='#1a1a2e', width=2, shape='spline'),
         fill='tozeroy',
-        fillcolor='rgba(129,140,248,0.08)',
+        fillcolor='rgba(26,26,46,0.04)',
     ))
 
     # Forecast line
     fig.add_trace(go.Scatter(
         x=forecast_df['Date'], y=forecast_df['Forecast'],
-        mode='lines', name='AI Forecast (No Action)',
-        line=dict(color='#f87171', width=2.5, dash='dash', shape='spline'),
+        mode='lines', name='Projected Trajectory (No Action)',
+        line=dict(color='#dc2626', width=2, dash='dash', shape='spline'),
     ))
 
     # Confidence band
     fig.add_trace(go.Scatter(
         x=pd.concat([forecast_df['Date'], forecast_df['Date'][::-1]]),
         y=pd.concat([forecast_df['Upper'], forecast_df['Lower'][::-1]]),
-        fill='toself', fillcolor='rgba(248,113,113,0.06)',
-        line=dict(color='rgba(248,113,113,0)'),
+        fill='toself', fillcolor='rgba(220,38,38,0.05)',
+        line=dict(color='rgba(220,38,38,0)'),
         name='Confidence Band',
     ))
 
-    # Anomaly-start marker
+    # Anomaly start marker
     anomaly_start = ops_df['Date'].min() + pd.Timedelta(days=59)
     fig.add_shape(
         type="line",
         x0=anomaly_start.strftime("%Y-%m-%d"),
         x1=anomaly_start.strftime("%Y-%m-%d"),
         y0=0, y1=1, yref="paper",
-        line=dict(color="rgba(251,191,36,0.4)", width=2, dash="dot"),
+        line=dict(color="rgba(245,158,11,0.5)", width=1.5, dash="dot"),
     )
     fig.add_annotation(
         x=anomaly_start.strftime("%Y-%m-%d"), y=1, yref="paper",
-        text="⚠ Anomaly Start", showarrow=False,
-        font=dict(color="#fbbf24", size=11, family="Outfit"),
+        text="⚠ Deviation Start", showarrow=False,
+        font=dict(color="#92400e", size=10, family="Inter"),
         yshift=12,
-        bgcolor="rgba(251,191,36,0.1)",
-        bordercolor="rgba(251,191,36,0.3)",
+        bgcolor="rgba(254,243,199,0.8)",
+        bordercolor="#fde68a",
         borderwidth=1,
         borderpad=4,
     )
 
+    # Clean chart layout — Per PDF: white, corporate, minimal
     fig.update_layout(
-        template='plotly_dark',
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(family='Outfit, sans-serif', color='#94a3b8'),
-        height=460,
+        template='plotly_white',
+        paper_bgcolor='rgba(255,255,255,0)',
+        plot_bgcolor='rgba(255,255,255,0)',
+        font=dict(family='Inter, sans-serif', color='#334155', size=12),
+        height=400,
         margin=dict(l=50, r=30, t=40, b=50),
         legend=dict(
             orientation="h", yanchor="bottom", y=1.02,
             xanchor="right", x=1,
-            bgcolor="rgba(15,18,35,0.5)",
-            bordercolor="rgba(99,102,241,0.15)",
+            bgcolor="rgba(248,250,252,0.9)",
+            bordercolor="#e2e8f0",
             borderwidth=1,
             font=dict(size=11),
         ),
         xaxis=dict(
-            gridcolor='rgba(99,102,241,0.06)',
+            gridcolor='#f1f5f9',
             title="Date",
             title_font=dict(color='#64748b'),
             zeroline=False,
         ),
         yaxis=dict(
-            gridcolor='rgba(99,102,241,0.06)',
+            gridcolor='#f1f5f9',
             title="Daily Sales (₹)",
             title_font=dict(color='#64748b'),
             zeroline=False,
         ),
         hoverlabel=dict(
-            bgcolor="rgba(15,18,35,0.9)",
-            bordercolor="rgba(99,102,241,0.3)",
-            font=dict(family="JetBrains Mono", size=12, color="#e2e8f0"),
+            bgcolor="#ffffff",
+            bordercolor="#e2e8f0",
+            font=dict(family="JetBrains Mono", size=11, color="#0f172a"),
         ),
     )
     st.plotly_chart(fig, use_container_width=True)
+
+    # Risk narrative — structured text block
+    st.markdown(
+        '<div class="reasoning-block">'
+        '<div class="reasoning-header">📋 Risk Narrative</div>'
+        f'<p>Based on the current deviation trajectory in <strong>{alert["Zone"]} Zone</strong>, '
+        f'the system projects a revenue erosion of <strong>{alert["Projected_Risk"]}</strong> over '
+        f'the next 60 days if no corrective action is taken. '
+        f'Margin compression is estimated at <strong>{margin_comp:.1f}%</strong> due to '
+        f'combined effects of sales decline and increased credit exposure.</p>'
+        f'<p>Working capital is being affected as credit days have increased from '
+        f'<strong>{alert["Credit_Increase"]}</strong>, indicating distributor financial stress.</p>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
 
 
 # ─────────────────────────────────────────────
@@ -262,37 +227,37 @@ def render_chat_tab(alert, ops_df):
     st.markdown(
         '<div class="layer-indicator layer-active">'
         '<span class="status-dot"></span> '
-        'Layer 4: Conversational AI Active</div>',
+        'Layer 4: Conversational Intelligence Active</div>',
         unsafe_allow_html=True,
     )
-    st.markdown("### 💬 AI Chat Intelligence")
+    st.markdown("#### Operational Intelligence Chat")
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     st.markdown(
-        "*Ask the AI about the detected anomaly. "
-        "Responses are generated from real-time operational data analysis.*"
+        "*Ask the system about the detected anomaly. "
+        "Responses are contextual — generated from real-time operational data analysis.*"
     )
 
     demo_responses = get_demo_responses(alert, ops_df.shape[0])
 
-    # Quick-question buttons
-    st.markdown("**Suggested Queries:**")
+    # Quick-question buttons — Per PDF: business-focused, contextual
+    st.markdown("**Suggested Questions:**")
     qc1, qc2, qc3 = st.columns(3)
     with qc1:
-        if st.button(f"🔍 Why is {alert['Zone']} Zone dropping?", key="q1"):
+        if st.button("🔍 What is driving this deviation?", key="q1"):
             _add_chat(
-                f"Why is {alert['Zone']} Zone performance dropping?",
+                f"What are the primary drivers causing the deviation in {alert['Zone']} Zone?",
                 demo_responses, alert,
             )
     with qc2:
-        if st.button("📊 What if no action taken?", key="q2"):
+        if st.button("📊 What is the financial exposure?", key="q2"):
             _add_chat(
                 "What happens if no action is taken?",
                 demo_responses, alert,
             )
     with qc3:
-        if st.button("⚡ Recommended actions?", key="q3"):
+        if st.button("⚡ Provide containment strategy", key="q3"):
             _add_chat(
-                "What corrective action do you recommend?",
+                "What containment strategies do you recommend to limit exposure?",
                 demo_responses, alert,
             )
 
@@ -304,7 +269,7 @@ def render_chat_tab(alert, ops_df):
             st.markdown(msg["content"])
 
     # Free-text input
-    if user_input := st.chat_input("Ask the AI about the detected anomaly..."):
+    if user_input := st.chat_input("Ask about the detected anomaly..."):
         response = match_response(user_input, demo_responses, alert)
         st.session_state.chat_messages.append({"role": "user", "content": user_input})
         st.session_state.chat_messages.append({"role": "assistant", "content": response})
@@ -318,7 +283,9 @@ def _add_chat(question, demo_responses, alert):
 
 
 # ─────────────────────────────────────────────
-# TAB 4 – Trigger Workflow
+# TAB 4 – Trigger Workflow (Automation)
+# Per PDF: "Position Automation as Next Phase"
+# "Corrective workflow can be triggered automatically"
 # ─────────────────────────────────────────────
 def render_workflow_tab(alert):
     st.markdown(
@@ -327,17 +294,17 @@ def render_workflow_tab(alert):
         'Layer 5: Automation Layer Active</div>',
         unsafe_allow_html=True,
     )
-    st.markdown("### ⚡ Corrective Workflow Automation")
+    st.markdown("#### Corrective Workflow Automation")
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     st.markdown(
-        "*Click below to trigger AI-generated corrective actions. "
-        "The system will create draft communications and action plans automatically.*"
+        "*The system can trigger corrective workflows automatically based on detected anomalies. "
+        "Review and approve the generated action plans below.*"
     )
 
     _, col_mid, _ = st.columns([1, 1, 1])
     with col_mid:
         trigger = st.button(
-            "⚡ Trigger Corrective Workflow",
+            "⚡ Yes, Generate Mitigation Plans",
             use_container_width=True,
             key="workflow_btn",
         )
@@ -346,17 +313,17 @@ def render_workflow_tab(alert):
         st.session_state.workflow_triggered = True
 
     if st.session_state.get("workflow_triggered"):
-        with st.spinner("AI generating corrective actions..."):
+        with st.spinner("Generating corrective actions..."):
             time.sleep(1)
 
         actions = generate_workflow_actions(alert)
 
         st.markdown("""
         <div class="workflow-success">
-            <span style="color:#4ade80;font-weight:700;font-size:1.1rem;">
-                ✅ 3 Corrective Actions Generated by AI
+            <span style="color:#166534;font-weight:700;font-size:1rem;">
+                ✅ 3 Corrective Actions Generated
             </span><br>
-            <span style="color:#86efac;font-size:0.82rem;">
+            <span style="color:#15803d;font-size:0.82rem;">
                 Review below. Once approved, actions execute automatically.
             </span>
         </div>
@@ -368,10 +335,10 @@ def render_workflow_tab(alert):
 
         st.markdown("""
         <div class="workflow-info">
-            <p style="color:#a78bfa;font-size:0.95rem;font-weight:600;margin:0;">
-                💡 In production, these AI-generated actions are automatically routed
+            <p style="color:#334155;font-size:0.9rem;font-weight:500;margin:0;">
+                💡 In production, these corrective actions are automatically routed
                 to approval workflows, email systems, and CRM platforms
-                via intelligent API integrations.
+                via API integrations.
             </p>
         </div>
         """, unsafe_allow_html=True)

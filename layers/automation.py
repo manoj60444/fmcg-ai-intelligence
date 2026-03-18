@@ -16,11 +16,11 @@ def generate_workflow_actions(alert):
 
     return {
         "email_regional_manager": {
-            "title": "📧 Email to Regional Manager",
-            "type": "Email Draft",
+            "title": "📧 Automated Auditor Notice: Regional Director",
+            "type": "Escalation Draft",
             "content": f"""
-**To:** Regional Manager – {zone} Zone
-**Subject:** URGENT: Distributor Performance Anomaly – {zone} Zone, {cluster}
+**To:** Regional Director – {zone} Operations
+**Subject:** FINANCIAL RISK ESCALATION: Unmitigated Performance Anomaly – {cluster}
 
 Dear Regional Manager,
 
@@ -44,10 +44,10 @@ FMCG Intelligence System
 """,
         },
         "scheme_proposal": {
-            "title": "📋 Scheme Proposal Note",
-            "type": "Proposal Document",
+            "title": "📋 Financial Mitigation Proposal",
+            "type": "System-Generated Strategy",
             "content": f"""
-**SCHEME REACTIVATION PROPOSAL**
+**CAPITAL & REVENUE MITIGATION STRATEGY**
 **Zone:** {zone} | **Cluster:** {cluster}
 
 **Background:**
@@ -72,11 +72,11 @@ on key categories
 """,
         },
         "credit_warning": {
-            "title": "⚠️ Credit Control Warning",
-            "type": "Internal Alert",
+            "title": "⚠️ Working Capital Exposure Alert",
+            "type": "Risk Control Protocol",
             "content": f"""
-**CREDIT CONTROL ALERT**
-**Zone:** {zone} | **Priority:** HIGH
+**CREDIT & WORKING CAPITAL ALERT**
+**Control Zone:** {zone} | **Exposure Priority:** CRITICAL
 
 **Summary:**
 Credit days for {affected} distributors have increased from {credit}.

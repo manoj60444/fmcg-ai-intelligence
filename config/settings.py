@@ -10,7 +10,7 @@ FMCG AI Layers Demo - Configuration & Constants
 # ============================================================
 APP_TITLE = "FMCG Operational Intelligence System"
 APP_ICON = "🧠"
-APP_SUBTITLE = "POWERED BY AI · 6 ACTIVE INTELLIGENCE LAYERS"
+APP_SUBTITLE = "POWERED BY AI · 5 ACTIVE INTELLIGENCE LAYERS"
 
 # ============================================================
 # DATA PATHS
@@ -71,7 +71,6 @@ LAYERS = [
     {"name": "Predictive", "icon": "📈"},
     {"name": "Conversational", "icon": "💬"},
     {"name": "Automation", "icon": "⚡"},
-    {"name": "Presentation", "icon": "🖥️"},
 ]
 # ============================================================
 # AI CORE CONFIGURATION (GEMINI)
